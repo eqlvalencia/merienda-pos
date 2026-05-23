@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Merienda POS</title>
+<title>🍌 Merienda POS — Home Business Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--cream:#FDF6EC;--warm:#F5E6C8;--brown:#5C3D1E;--brown-light:#8B5E3C;--brown-pale:#C8956C;--green:#2D6A4F;--green-pale:#D8F3DC;--blue:#1565C0;--blue-pale:#E3F2FD;--amber:#E65100;--amber-pale:#FFF3E0;--red:#C62828;--red-pale:#FFEBEE;--text:#2C1810;--text-mid:#6B4226;--text-soft:#A07850;--border:rgba(92,61,30,0.15);--border-mid:rgba(92,61,30,0.25);--shadow:0 2px 12px rgba(92,61,30,0.10);--shadow-lg:0 8px 32px rgba(92,61,30,0.15);--radius:12px;--radius-sm:8px}
@@ -15,7 +15,7 @@ h1,h2,h3{font-family:'DM Serif Display',serif}
 #login-screen::after{content:'';position:absolute;bottom:-60px;left:-60px;width:260px;height:260px;background:var(--warm);border-radius:50%;opacity:0.4}
 .login-card{background:#fff;border-radius:20px;padding:2.5rem 2rem;width:100%;max-width:380px;box-shadow:var(--shadow-lg);position:relative;z-index:1;border:0.5px solid var(--border)}
 .login-logo{text-align:center;margin-bottom:1.5rem}
-.login-logo h1{font-size:2rem;color:var(--brown);line-height:1.1}
+.login-logo h1{font-size:1.9rem;color:var(--brown);line-height:1.2}
 .login-logo p{font-size:13px;color:var(--text-soft);margin-top:6px}
 .login-tabs{display:flex;border:0.5px solid var(--border-mid);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:1.5rem}
 .login-tab{flex:1;padding:10px;text-align:center;font-size:13px;cursor:pointer;background:#fff;color:var(--text-soft);transition:all 0.2s;border:none;font-family:'DM Sans',sans-serif}
@@ -28,24 +28,30 @@ h1,h2,h3{font-family:'DM Serif Display',serif}
 .btn-login:hover{background:var(--brown-light)}
 .btn-login:active{transform:scale(0.98)}
 .login-error{font-size:13px;color:var(--red);margin-top:10px;text-align:center;min-height:20px;font-weight:500}
+.sync-status{font-size:11px;text-align:center;margin-top:8px;color:var(--text-soft)}
+.sync-status.ok{color:var(--green)}.sync-status.err{color:var(--red)}
 #app{display:none;flex-direction:column;min-height:100vh}
 header{background:var(--brown);color:#fff;padding:0 1.5rem;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(92,61,30,0.3)}
-.header-left{display:flex;align-items:center;gap:12px}
-.header-logo{font-family:'DM Serif Display',serif;font-size:1.3rem}
+.header-left{display:flex;align-items:center;gap:10px}
+.header-logo{font-family:'DM Serif Display',serif;font-size:1.2rem;line-height:1.2}
+.header-sub{font-size:10px;opacity:0.7;display:block}
 .header-badge{font-size:11px;background:rgba(255,255,255,0.2);padding:3px 10px;border-radius:20px}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:#52B788;display:inline-block;animation:pulse 2s infinite}
+.sync-dot.offline{background:#E65100;animation:none}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 .user-pill{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.85)}
 .user-avatar{width:28px;height:28px;border-radius:50%;background:var(--brown-pale);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff}
 .btn-logout{background:none;border:0.5px solid rgba(255,255,255,0.3);color:rgba(255,255,255,0.8);padding:5px 12px;border-radius:20px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif}
 .btn-logout:hover{background:rgba(255,255,255,0.15)}
 .app-body{display:flex;flex:1}
-.sidebar{width:200px;background:#fff;border-right:0.5px solid var(--border);padding:1.5rem 0;flex-shrink:0;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
+.sidebar{width:210px;background:#fff;border-right:0.5px solid var(--border);padding:1.5rem 0;flex-shrink:0;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
 .nav-section{padding:0 1rem;margin-bottom:0.5rem}
 .nav-label{font-size:10px;font-weight:600;color:var(--text-soft);text-transform:uppercase;letter-spacing:0.08em;padding:0 0.5rem;margin-bottom:6px}
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--text-mid);cursor:pointer;border:none;background:none;width:100%;font-family:'DM Sans',sans-serif;text-align:left;transition:all 0.15s}
 .nav-item:hover{background:var(--warm);color:var(--brown)}
 .nav-item.active{background:var(--brown);color:#fff}
 .nav-divider{height:0.5px;background:var(--border);margin:0.75rem 1rem}
-.main-content{flex:1;padding:1.5rem;max-width:900px}
+.main-content{flex:1;padding:1.5rem;max-width:960px}
 .page{display:none}.page.active{display:block}
 .page-title{font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--brown);margin-bottom:4px}
 .page-sub{font-size:13px;color:var(--text-soft);margin-bottom:1.5rem}
@@ -57,6 +63,7 @@ header{background:var(--brown);color:#fff;padding:0 1.5rem;height:56px;display:f
 .metric-val{font-size:22px;font-weight:600;color:var(--text)}
 .metric-sub{font-size:11px;color:var(--text-soft);margin-top:3px}
 .metric.you{border-left:3px solid var(--green)}.metric.julie{border-left:3px solid var(--blue)}
+.metric.warn{border-left:3px solid var(--amber)}
 .form-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
 .form-row .fg{flex:1;min-width:100px}
 .fg label{font-size:12px;font-weight:500;color:var(--text-mid);display:block;margin-bottom:5px}
@@ -81,20 +88,23 @@ tr:hover td{background:var(--cream)}
 .split-visual{display:flex;border-radius:var(--radius-sm);overflow:hidden;margin:8px 0;height:44px}
 .split-you-bar{background:var(--green-pale);display:flex;align-items:center;padding:0 12px;font-size:12px;font-weight:500;color:var(--green);flex:0 0 70%}
 .split-julie-bar{background:var(--blue-pale);display:flex;align-items:center;padding:0 12px;font-size:12px;font-weight:500;color:var(--blue);flex:0 0 30%}
+.stock-bar-wrap{height:8px;background:var(--cream);border-radius:4px;overflow:hidden;margin-top:4px;border:0.5px solid var(--border)}
+.stock-bar{height:100%;border-radius:4px;transition:width 0.4s}
 .log-item{display:flex;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--border);font-size:12px;align-items:flex-start}
 .log-item:last-child{border-bottom:none}
 .log-dot{width:8px;height:8px;border-radius:50%;margin-top:4px;flex-shrink:0}
 .log-by-you{background:var(--green)}.log-by-julie{background:var(--blue)}
 .log-meta{color:var(--text-soft)}
 .empty{text-align:center;padding:2rem;color:var(--text-soft);font-size:13px}
-.empty-icon{font-size:2rem;margin-bottom:8px;opacity:0.4}
+.empty-icon{font-size:2rem;margin-bottom:8px;opacity:0.5}
+.loading{text-align:center;padding:1.5rem;color:var(--text-soft);font-size:13px}
 #toast{position:fixed;bottom:24px;right:24px;background:var(--brown);color:#fff;padding:10px 18px;border-radius:var(--radius-sm);font-size:13px;box-shadow:var(--shadow-lg);transform:translateY(80px);opacity:0;transition:all 0.3s;z-index:9999;pointer-events:none}
 #toast.show{transform:translateY(0);opacity:1}
-.mobile-nav{display:none;background:#fff;border-top:0.5px solid var(--border);padding:8px 0;position:fixed;bottom:0;left:0;right:0;z-index:100}
+.mobile-nav{display:none;background:#fff;border-top:0.5px solid var(--border);padding:6px 0;position:fixed;bottom:0;left:0;right:0;z-index:100}
 .mobile-nav-items{display:flex;justify-content:space-around}
-.mobile-nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:var(--text-soft);cursor:pointer;padding:4px 12px;border-radius:var(--radius-sm);background:none;border:none;font-family:'DM Sans',sans-serif}
+.mobile-nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;color:var(--text-soft);cursor:pointer;padding:4px 10px;border-radius:var(--radius-sm);background:none;border:none;font-family:'DM Sans',sans-serif}
 .mobile-nav-item.active{color:var(--brown)}
-@media(max-width:600px){.sidebar{display:none}.main-content{padding:1rem;padding-bottom:80px}.mobile-nav{display:block}.form-row{flex-direction:column}}
+@media(max-width:600px){.sidebar{display:none}.main-content{padding:1rem;padding-bottom:80px}.mobile-nav{display:block}.form-row{flex-direction:column}.header-sub{display:none}}
 </style>
 </head>
 <body>
@@ -102,8 +112,8 @@ tr:hover td{background:var(--cream)}
 <div id="login-screen">
   <div class="login-card">
     <div class="login-logo">
-      <h1>🍮 Merienda POS</h1>
-      <p>Home business tracker</p>
+      <h1>🍌🍡 Merienda POS</h1>
+      <p>Home Business Tracker</p>
     </div>
     <div class="login-tabs">
       <button class="login-tab active" id="tab-owner" onclick="setLoginRole('owner')">Owner (You)</button>
@@ -119,14 +129,19 @@ tr:hover td{background:var(--cream)}
     </div>
     <button class="btn-login" id="login-btn">Sign in</button>
     <p class="login-error" id="login-error"></p>
+    <p class="sync-status" id="login-sync">🔥 Connecting to database...</p>
   </div>
 </div>
 
 <div id="app">
   <header>
     <div class="header-left">
-      <span class="header-logo">🍮 Merienda POS</span>
+      <div>
+        <span class="header-logo">🍌🍡 Merienda POS</span>
+        <span class="header-sub">Home Business Tracker</span>
+      </div>
       <span class="header-badge" id="role-badge">Owner</span>
+      <span class="sync-dot" id="sync-dot" title="Live sync"></span>
     </div>
     <div class="user-pill">
       <div class="user-avatar" id="user-avatar">O</div>
@@ -134,34 +149,40 @@ tr:hover td{background:var(--cream)}
       <button class="btn-logout" id="logout-btn">Sign out</button>
     </div>
   </header>
+
   <div class="app-body">
     <nav class="sidebar">
+      <!-- shared pages -->
       <div class="nav-section">
         <div class="nav-label">Business</div>
         <button class="nav-item active" id="nav-dashboard" data-page="dashboard">📊 Dashboard</button>
         <button class="nav-item" id="nav-sales" data-page="sales">🧾 Daily Sales</button>
         <button class="nav-item" id="nav-materials" data-page="materials">📦 Raw Materials</button>
+        <button class="nav-item" id="nav-stock" data-page="stock">📉 Stock Tracker</button>
+        <button class="nav-item" id="nav-products-julie" data-page="products" style="display:none">🍌 Products</button>
       </div>
-      <div class="nav-divider"></div>
+      <!-- admin only -->
+      <div class="nav-divider" id="admin-divider"></div>
       <div class="nav-section" id="admin-nav">
         <div class="nav-label">Admin Only</div>
-        <button class="nav-item" id="nav-products" data-page="products">🍱 Products</button>
+        <button class="nav-item" id="nav-products" data-page="products">🍌 Products</button>
         <button class="nav-item" id="nav-tubo" data-page="tubo">💰 Tubo & Split</button>
         <button class="nav-item" id="nav-activity" data-page="activity">🕐 Activity Log</button>
       </div>
-      <div class="nav-section" id="julie-nav" style="display:none">
-        <div class="nav-label">View Only</div>
-        <button class="nav-item" id="nav-tubo-julie" data-page="tubo">💰 Tubo & Split</button>
-      </div>
     </nav>
+
     <main class="main-content">
+
+      <!-- DASHBOARD -->
       <div id="page-dashboard" class="page active">
         <h2 class="page-title">Dashboard</h2>
         <p class="page-sub" id="dash-greeting">Welcome!</p>
         <div class="metrics-grid" id="dash-metrics"></div>
         <div class="card"><div class="card-title">Today's sales</div><div id="dash-today"></div></div>
-        <div class="card"><div class="card-title">Today's tubo split</div><div id="dash-split"></div></div>
+        <div class="card" id="owner-split-card"><div class="card-title">Today's tubo split</div><div id="dash-split"></div></div>
       </div>
+
+      <!-- DAILY SALES -->
       <div id="page-sales" class="page">
         <h2 class="page-title">Daily Sales</h2>
         <p class="page-sub">Encode how many pieces sold today</p>
@@ -169,44 +190,70 @@ tr:hover td{background:var(--cream)}
           <div class="card-title">Add sale entry</div>
           <div class="form-row">
             <div class="fg"><label>Product</label><select id="sale-product"><option value="">-- Select --</option></select></div>
-            <div class="fg" style="max-width:120px"><label>Qty (pcs)</label><input type="number" id="sale-qty" min="1" step="1" placeholder="0"></div>
+            <div class="fg" style="max-width:120px"><label>Qty sold (pcs)</label><input type="number" id="sale-qty" min="1" step="1" placeholder="0"></div>
             <div class="fg" style="max-width:150px"><label>Date</label><input type="date" id="sale-date"></div>
             <div style="display:flex;align-items:flex-end"><button class="btn btn-primary" id="add-sale-btn">Add entry</button></div>
           </div>
         </div>
-        <div class="card"><div class="card-title">Sales history</div><div id="sales-list"></div></div>
+        <div class="card"><div class="card-title">Sales history</div><div id="sales-list"><div class="loading">Loading...</div></div></div>
       </div>
+
+      <!-- RAW MATERIALS -->
       <div id="page-materials" class="page">
         <h2 class="page-title">Raw Materials</h2>
-        <p class="page-sub">Track ingredients and supplies purchased</p>
+        <p class="page-sub">Log ingredients and supplies purchased</p>
         <div class="card">
           <div class="card-title">Add purchase</div>
           <div class="form-row">
-            <div class="fg"><label>Material name</label><input type="text" id="mat-name" placeholder="e.g. Flour 1kg"></div>
-            <div class="fg" style="max-width:120px"><label>Cost (₱)</label><input type="number" id="mat-cost" min="0" step="0.5" placeholder="0.00"></div>
-            <div class="fg" style="max-width:100px"><label>Unit</label><select id="mat-unit"><option>pack</option><option>kg</option><option>g</option><option>L</option><option>ml</option><option>pcs</option><option>cup</option></select></div>
+            <div class="fg"><label>Material name</label><input type="text" id="mat-name" placeholder="e.g. Saging na saba, lumpia wrapper, brown sugar"></div>
+            <div class="fg" style="max-width:110px"><label>Total qty bought</label><input type="number" id="mat-qty-bought" min="0" step="1" placeholder="e.g. 50"></div>
+            <div class="fg" style="max-width:90px"><label>Unit</label><select id="mat-unit"><option>pcs</option><option>pack</option><option>kg</option><option>g</option><option>L</option><option>ml</option><option>bundle</option><option>cup</option><option>tray</option></select></div>
+            <div class="fg" style="max-width:120px"><label>Total cost (₱)</label><input type="number" id="mat-cost" min="0" step="0.5" placeholder="0.00"></div>
             <div class="fg" style="max-width:150px"><label>Date</label><input type="date" id="mat-date"></div>
             <div style="display:flex;align-items:flex-end"><button class="btn btn-primary" id="add-mat-btn">Add</button></div>
           </div>
+          <p class="hint">Enter the full qty bought — the stock tracker will show what's been used and what's left.</p>
         </div>
-        <div class="card"><div class="card-title">Materials log</div><div id="mat-list"></div></div>
+        <div class="card"><div class="card-title">Materials log</div><div id="mat-list"><div class="loading">Loading...</div></div></div>
       </div>
+
+      <!-- STOCK TRACKER -->
+      <div id="page-stock" class="page">
+        <h2 class="page-title">Stock Tracker</h2>
+        <p class="page-sub">See how much of each material has been used and what's left</p>
+        <div class="card">
+          <div class="card-title">Log material usage</div>
+          <div class="form-row">
+            <div class="fg"><label>Material</label><select id="use-material"><option value="">-- Select material --</option></select></div>
+            <div class="fg" style="max-width:130px"><label>Qty used</label><input type="number" id="use-qty" min="0" step="1" placeholder="0"></div>
+            <div class="fg" style="max-width:150px"><label>Date</label><input type="date" id="use-date"></div>
+            <div style="display:flex;align-items:flex-end"><button class="btn btn-primary" id="add-use-btn">Log usage</button></div>
+          </div>
+          <p class="hint">Every time you use ingredients for cooking, log it here so you can track what's left.</p>
+        </div>
+        <div class="card"><div class="card-title">Current stock levels</div><div id="stock-list"><div class="loading">Loading...</div></div></div>
+        <div class="card"><div class="card-title">Usage history</div><div id="usage-list"><div class="loading">Loading...</div></div></div>
+      </div>
+
+      <!-- PRODUCTS -->
       <div id="page-products" class="page">
         <h2 class="page-title">Products</h2>
-        <p class="page-sub">Admin only — set products and prices</p>
-        <div class="card">
-          <div class="card-title">Add product</div>
+        <p class="page-sub" id="products-sub">View products and batch sizes</p>
+        <div class="card" id="add-product-card">
+          <div class="card-title">Add product (Admin only)</div>
           <div class="form-row">
-            <div class="fg"><label>Product name</label><input type="text" id="prod-name" placeholder="e.g. Puto, Maja Blanca"></div>
+            <div class="fg"><label>Product name</label><input type="text" id="prod-name" placeholder="e.g. Turon, Banana Cue, Camote Cue"></div>
             <div class="fg" style="max-width:130px"><label>Selling price (₱)</label><input type="number" id="prod-price" min="0" step="0.5" placeholder="0.00"></div>
             <div class="fg" style="max-width:120px"><label>Batch qty (pcs)</label><input type="number" id="prod-qty" min="1" step="1" placeholder="20"></div>
             <div class="fg" style="max-width:150px"><label>Raw cost/batch (₱)</label><input type="number" id="prod-rawcost" min="0" step="0.5" placeholder="0.00"></div>
             <div style="display:flex;align-items:flex-end"><button class="btn btn-primary" id="add-prod-btn">Add</button></div>
           </div>
-          <p class="hint">Salary and electricity not included — this is gross tubo only.</p>
+          <p class="hint">Salary and electricity not included — gross tubo only.</p>
         </div>
-        <div class="card"><div class="card-title">Products list</div><div id="prod-list"></div></div>
+        <div class="card"><div class="card-title">Products list</div><div id="prod-list"><div class="loading">Loading...</div></div></div>
       </div>
+
+      <!-- TUBO & SPLIT (owner only) -->
       <div id="page-tubo" class="page">
         <h2 class="page-title">Tubo & Split</h2>
         <p class="page-sub">Gross margin — 70% You · 30% Julie (before electricity & salary)</p>
@@ -217,334 +264,406 @@ tr:hover td{background:var(--cream)}
           <p style="font-size:12px;color:var(--text-mid);line-height:1.7">⚠️ These margins are <strong>before</strong> electricity, gas, and salary. Deduct daily operating costs from the <em>You (70%)</em> side to get your actual take-home.</p>
         </div>
       </div>
+
+      <!-- ACTIVITY LOG (owner only) -->
       <div id="page-activity" class="page">
         <h2 class="page-title">Activity Log</h2>
         <p class="page-sub">Every change — who did what and when</p>
-        <div class="card"><div id="activity-log"></div></div>
+        <div class="card"><div id="activity-log"><div class="loading">Loading...</div></div></div>
       </div>
+
     </main>
   </div>
+
   <div class="mobile-nav">
     <div class="mobile-nav-items">
-      <button class="mobile-nav-item active" id="mnav-dashboard" data-page="dashboard">📊<span>Home</span></button>
-      <button class="mobile-nav-item" id="mnav-sales" data-page="sales">🧾<span>Sales</span></button>
-      <button class="mobile-nav-item" id="mnav-materials" data-page="materials">📦<span>Materials</span></button>
-      <button class="mobile-nav-item" id="mnav-tubo" data-page="tubo">💰<span>Tubo</span></button>
+      <button class="mobile-nav-item active" id="mnav-dashboard" data-page="dashboard">📊<br>Home</button>
+      <button class="mobile-nav-item" id="mnav-sales" data-page="sales">🧾<br>Sales</button>
+      <button class="mobile-nav-item" id="mnav-materials" data-page="materials">📦<br>Materials</button>
+      <button class="mobile-nav-item" id="mnav-stock" data-page="stock">📉<br>Stock</button>
+      <button class="mobile-nav-item" id="mnav-products" data-page="products">🍌<br>Products</button>
     </div>
   </div>
 </div>
 
 <div id="toast"></div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
+var firebaseConfig = {
+  apiKey: "AIzaSyCK04su72BT9wmk6Cwf0EHpoIOpgtLVzF4",
+  authDomain: "merienda-pos.firebaseapp.com",
+  projectId: "merienda-pos",
+  storageBucket: "merienda-pos.firebasestorage.app",
+  messagingSenderId: "891234516702",
+  appId: "1:891234516702:web:7a4dc0d58ffee2d9088c4f"
+};
+firebase.initializeApp(firebaseConfig);
+var fdb = firebase.firestore();
+
 var USERS = {
   owner: { pass: 'owner1234', role: 'owner', display: 'Owner' },
   julie: { pass: 'julie1234', role: 'julie', display: 'Julie' }
 };
-
 var currentUser = null;
-var db = { products: [], materials: [], sales: [], log: [] };
+var unsubs = [];
+var cachedProducts = [];
+var cachedMaterials = [];
 
-function loadDB() {
-  try { var s = localStorage.getItem('merienda_db'); if (s) db = JSON.parse(s); } catch(e) {}
-}
-function saveDB() {
-  try { localStorage.setItem('merienda_db', JSON.stringify(db)); } catch(e) {}
-}
-loadDB();
+// ping db
+fdb.collection('_ping').doc('check').set({ t: Date.now() })
+  .then(function() { var e = document.getElementById('login-sync'); if(e){ e.textContent='🟢 Database connected!'; e.className='sync-status ok'; } })
+  .catch(function() { var e = document.getElementById('login-sync'); if(e){ e.textContent='🔴 Database offline'; e.className='sync-status err'; } });
 
-// LOGIN
-function setLoginRole(role) {
-  document.getElementById('tab-owner').className = 'login-tab' + (role === 'owner' ? ' active' : '');
-  document.getElementById('tab-julie').className = 'login-tab' + (role === 'julie' ? ' active' : '');
-  document.getElementById('login-user').value = role === 'owner' ? 'owner' : 'julie';
+// ── LOGIN ────────────────────────────────────────────────────
+function setLoginRole(r) {
+  document.getElementById('tab-owner').className = 'login-tab'+(r==='owner'?' active':'');
+  document.getElementById('tab-julie').className = 'login-tab'+(r==='julie'?' active':'');
+  document.getElementById('login-user').value = r==='owner'?'owner':'julie';
 }
-
 function doLogin() {
   var u = document.getElementById('login-user').value.trim().toLowerCase();
   var p = document.getElementById('login-pass').value;
   var err = document.getElementById('login-error');
   err.textContent = '';
-  if (!u || !p) { err.textContent = 'Please enter username and password.'; return; }
-  if (!USERS[u]) { err.textContent = 'Username not found.'; return; }
-  if (USERS[u].pass !== p) { err.textContent = 'Wrong password. Try again.'; return; }
+  if (!u||!p) { err.textContent='Please enter username and password.'; return; }
+  if (!USERS[u]) { err.textContent='Username not found.'; return; }
+  if (USERS[u].pass!==p) { err.textContent='Wrong password. Try again.'; return; }
   currentUser = u;
   document.getElementById('login-screen').style.display = 'none';
   var app = document.getElementById('app');
-  app.style.display = 'flex';
-  app.style.flexDirection = 'column';
-  app.style.minHeight = '100vh';
-  setupUI();
-  goPage('dashboard');
+  app.style.display='flex'; app.style.flexDirection='column'; app.style.minHeight='100vh';
+  setupUI(); goPage('dashboard');
 }
-
 function doLogout() {
-  currentUser = null;
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('login-pass').value = '';
+  unsubs.forEach(function(u){u();}); unsubs=[];
+  currentUser=null;
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('login-pass').value='';
 }
-
 function setupUI() {
   var u = USERS[currentUser];
   document.getElementById('role-badge').textContent = u.display;
   document.getElementById('user-name-header').textContent = u.display;
   document.getElementById('user-avatar').textContent = u.display[0];
-  if (u.role === 'julie') {
-    document.getElementById('admin-nav').style.display = 'none';
-    document.getElementById('julie-nav').style.display = 'block';
+  var today = new Date().toISOString().slice(0,10);
+  ['sale-date','mat-date','use-date'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=today; });
+  if (u.role==='julie') {
+    // julie: hide admin nav, hide tubo split card, show products in main nav
+    document.getElementById('admin-nav').style.display='none';
+    document.getElementById('admin-divider').style.display='none';
+    document.getElementById('owner-split-card').style.display='none';
+    document.getElementById('nav-products-julie').style.display='block';
+    document.getElementById('add-product-card').style.display='none';
+    document.getElementById('products-sub').textContent='View products and how many pcs per batch';
   } else {
-    document.getElementById('admin-nav').style.display = 'block';
-    document.getElementById('julie-nav').style.display = 'none';
+    document.getElementById('admin-nav').style.display='block';
+    document.getElementById('admin-divider').style.display='block';
+    document.getElementById('owner-split-card').style.display='block';
+    document.getElementById('nav-products-julie').style.display='none';
+    document.getElementById('add-product-card').style.display='block';
+    document.getElementById('products-sub').textContent='Admin only — set products and prices';
   }
-  var today = new Date().toISOString().slice(0, 10);
-  var sd = document.getElementById('sale-date'); if (sd) sd.value = today;
-  var md = document.getElementById('mat-date'); if (md) md.value = today;
-  populateSaleDropdown();
 }
 
-// NAVIGATION
+// ── NAV ──────────────────────────────────────────────────────
 function goPage(p) {
-  document.querySelectorAll('.page').forEach(function(el) { el.classList.remove('active'); });
-  document.querySelectorAll('.nav-item, .mobile-nav-item').forEach(function(el) { el.classList.remove('active'); });
-  var pg = document.getElementById('page-' + p); if (pg) pg.classList.add('active');
-  var navIds = ['nav-' + p, 'nav-' + p + '-julie', 'mnav-' + p];
-  navIds.forEach(function(id) { var el = document.getElementById(id); if (el) el.classList.add('active'); });
-  if (p === 'dashboard') renderDashboard();
-  if (p === 'sales') renderSales();
-  if (p === 'materials') renderMaterials();
-  if (p === 'products') renderProducts();
-  if (p === 'tubo') renderTubo();
-  if (p === 'activity') renderActivity();
+  document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.nav-item,.mobile-nav-item').forEach(function(el){el.classList.remove('active');});
+  var pg=document.getElementById('page-'+p); if(pg) pg.classList.add('active');
+  ['nav-'+p,'nav-'+p+'-julie','mnav-'+p].forEach(function(id){ var el=document.getElementById(id); if(el) el.classList.add('active'); });
+  if(p==='dashboard') renderDashboard();
+  if(p==='sales') listenSales();
+  if(p==='materials') listenMaterials();
+  if(p==='stock') listenStock();
+  if(p==='products') listenProducts();
+  if(p==='tubo') listenTubo();
+  if(p==='activity') listenActivity();
 }
 
-// WIRE UP BUTTONS (safe, no onclick in HTML)
-window.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('login-btn').addEventListener('click', doLogin);
-  document.getElementById('login-pass').addEventListener('keydown', function(e) { if (e.key === 'Enter') doLogin(); });
-  document.getElementById('logout-btn').addEventListener('click', doLogout);
-  document.getElementById('add-sale-btn').addEventListener('click', addSale);
-  document.getElementById('add-mat-btn').addEventListener('click', addMaterial);
-  document.getElementById('add-prod-btn').addEventListener('click', addProduct);
-  document.querySelectorAll('.nav-item, .mobile-nav-item').forEach(function(btn) {
-    btn.addEventListener('click', function() { goPage(this.dataset.page); });
+// ── LOG ──────────────────────────────────────────────────────
+function logAction(action,detail) {
+  fdb.collection('log').add({ user:currentUser, display:USERS[currentUser].display, action:action, detail:detail, ts:firebase.firestore.FieldValue.serverTimestamp() });
+}
+function fmtTs(ts) {
+  if(!ts) return '';
+  var d=ts.toDate?ts.toDate():new Date(ts);
+  return d.toLocaleDateString('en-PH',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-PH',{hour:'2-digit',minute:'2-digit'});
+}
+
+// ── PRODUCTS ─────────────────────────────────────────────────
+function addProduct() {
+  if(USERS[currentUser].role!=='owner'){showToast('Admin only');return;}
+  var n=document.getElementById('prod-name').value.trim();
+  var sp=parseFloat(document.getElementById('prod-price').value);
+  var qty=parseInt(document.getElementById('prod-qty').value);
+  var rc=parseFloat(document.getElementById('prod-rawcost').value);
+  if(!n||isNaN(sp)||isNaN(qty)||isNaN(rc)){showToast('Please fill all fields');return;}
+  var costPc=rc/qty,profitPc=sp-costPc,margin=(profitPc/sp)*100;
+  fdb.collection('products').add({ name:n,sellingPrice:sp,batchQty:qty,rawCostBatch:rc,costPc:costPc,profitPc:profitPc,margin:margin,youPc:profitPc*0.7,juliePc:profitPc*0.3,createdAt:firebase.firestore.FieldValue.serverTimestamp() })
+  .then(function(){ logAction('Added product','"'+n+'" @ ₱'+sp.toFixed(2)+'/pc'); ['prod-name','prod-price','prod-qty','prod-rawcost'].forEach(function(id){document.getElementById(id).value='';}); showToast('🍌 "'+n+'" added!'); });
+}
+function deleteProduct(id) {
+  if(USERS[currentUser].role!=='owner'){showToast('Admin only');return;}
+  if(!confirm('Delete this product?')) return;
+  fdb.collection('products').doc(id).delete().then(function(){ logAction('Deleted product','id:'+id); showToast('Deleted'); });
+}
+function listenProducts() {
+  var el=document.getElementById('prod-list');
+  var isOwner=USERS[currentUser].role==='owner';
+  el.innerHTML='<div class="loading">Loading...</div>';
+  var unsub=fdb.collection('products').orderBy('createdAt','desc').onSnapshot(function(snap){
+    cachedProducts=snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+    populateSaleDropdown();
+    if(snap.empty){el.innerHTML='<div class="empty"><div class="empty-icon">🍌</div>No products yet.</div>';return;}
+    var html='<div class="tbl-wrap"><table><thead><tr><th>Product</th><th>Sell ₱/pc</th><th>Batch qty</th>'+(isOwner?'<th>Cost/pc</th><th>Tubo/pc</th><th>You 70%</th><th>Julie 30%</th><th>Margin</th><th></th>':'')+'</tr></thead><tbody>';
+    cachedProducts.forEach(function(p){
+      var cls=p.margin>=50?'badge-green':p.margin>=30?'badge-amber':'badge-red';
+      if(isOwner){
+        html+='<tr><td><strong style="font-weight:500">'+p.name+'</strong></td><td>₱'+p.sellingPrice.toFixed(2)+'</td><td>'+p.batchQty+' pcs</td><td>₱'+p.costPc.toFixed(2)+'</td><td>₱'+p.profitPc.toFixed(2)+'</td><td style="color:var(--green);font-weight:500">₱'+p.youPc.toFixed(2)+'</td><td style="color:var(--blue);font-weight:500">₱'+p.juliePc.toFixed(2)+'</td><td><span class="badge '+cls+'">'+p.margin.toFixed(0)+'%</span></td><td><button class="btn btn-danger" onclick="deleteProduct(\''+p.id+'\')">Delete</button></td></tr>';
+      } else {
+        html+='<tr><td><strong style="font-weight:500">'+p.name+'</strong></td><td>₱'+p.sellingPrice.toFixed(2)+'</td><td><strong style="font-weight:500">'+p.batchQty+' pcs/batch</strong></td></tr>';
+      }
+    });
+    el.innerHTML=html+'</tbody></table></div>';
+  });
+  unsubs.push(unsub);
+}
+
+// ── MATERIALS ────────────────────────────────────────────────
+function addMaterial() {
+  var n=document.getElementById('mat-name').value.trim();
+  var qb=parseFloat(document.getElementById('mat-qty-bought').value);
+  var u=document.getElementById('mat-unit').value;
+  var c=parseFloat(document.getElementById('mat-cost').value);
+  var d=document.getElementById('mat-date').value;
+  if(!n||isNaN(qb)||isNaN(c)){showToast('Please fill name, qty and cost');return;}
+  fdb.collection('materials').add({ name:n,qtyBought:qb,unit:u,cost:c,date:d||new Date().toISOString().slice(0,10),addedBy:currentUser,addedByDisplay:USERS[currentUser].display,createdAt:firebase.firestore.FieldValue.serverTimestamp() })
+  .then(function(){ logAction('Added material','"'+n+'" '+qb+' '+u+' @ ₱'+c.toFixed(2)+' by '+USERS[currentUser].display); document.getElementById('mat-name').value=''; document.getElementById('mat-cost').value=''; document.getElementById('mat-qty-bought').value=''; showToast('"'+n+'" added!'); });
+}
+function deleteMaterial(id) {
+  if(USERS[currentUser].role!=='owner'){showToast('Only owner can delete');return;}
+  if(!confirm('Delete this material?')) return;
+  fdb.collection('materials').doc(id).delete().then(function(){ logAction('Deleted material','id:'+id); showToast('Deleted'); });
+}
+function listenMaterials() {
+  var el=document.getElementById('mat-list');
+  var isOwner=USERS[currentUser].role==='owner';
+  el.innerHTML='<div class="loading">Loading...</div>';
+  var unsub=fdb.collection('materials').orderBy('createdAt','desc').onSnapshot(function(snap){
+    cachedMaterials=snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+    populateMaterialDropdown();
+    if(snap.empty){el.innerHTML='<div class="empty"><div class="empty-icon">🧂</div>No materials logged yet.</div>';return;}
+    var html='<div class="tbl-wrap"><table><thead><tr><th>Material</th><th>Qty Bought</th><th>Unit</th><th>Cost</th><th>Date</th><th>By</th>'+(isOwner?'<th></th>':'')+'</tr></thead><tbody>';
+    snap.docs.forEach(function(doc){
+      var m=doc.data(),id=doc.id;
+      var who=m.addedBy==='julie'?'<span class="badge badge-blue">Julie</span>':'<span class="badge badge-brown">Owner</span>';
+      var del=isOwner?'<td><button class="btn btn-danger" onclick="deleteMaterial(\''+id+'\')">Delete</button></td>':'';
+      html+='<tr><td><strong style="font-weight:500">'+m.name+'</strong></td><td>'+m.qtyBought+' '+m.unit+'</td><td>'+m.unit+'</td><td>₱'+m.cost.toFixed(2)+'</td><td>'+m.date+'</td><td>'+who+'</td>'+del+'</tr>';
+    });
+    el.innerHTML=html+'</tbody></table></div>';
+  });
+  unsubs.push(unsub);
+}
+
+// ── STOCK TRACKER ────────────────────────────────────────────
+function populateMaterialDropdown() {
+  var sel=document.getElementById('use-material'); if(!sel) return;
+  var prev=sel.value;
+  sel.innerHTML='<option value="">-- Select material --</option>';
+  cachedMaterials.forEach(function(m){ sel.innerHTML+='<option value="'+m.id+'">'+m.name+' ('+m.unit+')</option>'; });
+  if(prev) sel.value=prev;
+}
+function addUsage() {
+  var mid=document.getElementById('use-material').value;
+  var qty=parseFloat(document.getElementById('use-qty').value);
+  var d=document.getElementById('use-date').value;
+  if(!mid||isNaN(qty)||qty<=0){showToast('Please select material and qty used');return;}
+  var mat=cachedMaterials.find(function(m){return m.id===mid;});
+  if(!mat){showToast('Material not found');return;}
+  fdb.collection('usage').add({ materialId:mid,materialName:mat.name,unit:mat.unit,qtyUsed:qty,date:d||new Date().toISOString().slice(0,10),addedBy:currentUser,addedByDisplay:USERS[currentUser].display,createdAt:firebase.firestore.FieldValue.serverTimestamp() })
+  .then(function(){ logAction('Logged usage',qty+' '+mat.unit+' of "'+mat.name+'" used by '+USERS[currentUser].display); document.getElementById('use-qty').value=''; showToast('Usage logged!'); });
+}
+function listenStock() {
+  var stockEl=document.getElementById('stock-list');
+  var usageEl=document.getElementById('usage-list');
+  stockEl.innerHTML='<div class="loading">Loading...</div>';
+  usageEl.innerHTML='<div class="loading">Loading...</div>';
+
+  // listen to materials + usage together
+  var unsub1=fdb.collection('materials').onSnapshot(function(matSnap){
+    fdb.collection('usage').get().then(function(useSnap){
+      var mats=matSnap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+      var uses=useSnap.docs.map(function(d){return d.data();});
+      if(!mats.length){stockEl.innerHTML='<div class="empty"><div class="empty-icon">📦</div>No materials yet. Add materials first.</div>';return;}
+      var html='<div class="tbl-wrap"><table><thead><tr><th>Material</th><th>Total Bought</th><th>Total Used</th><th>Remaining</th><th>Status</th></tr></thead><tbody>';
+      mats.forEach(function(m){
+        var totalBought=m.qtyBought||0;
+        var totalUsed=uses.filter(function(u){return u.materialId===m.id;}).reduce(function(s,u){return s+u.qtyUsed;},0);
+        var remaining=totalBought-totalUsed;
+        var pct=totalBought>0?Math.max(0,Math.min(100,(remaining/totalBought)*100)):0;
+        var barColor=pct>50?'#52B788':pct>20?'#E65100':'#C62828';
+        var status=remaining<=0?'<span class="badge badge-red">All used</span>':pct<=20?'<span class="badge badge-amber">Low stock</span>':'<span class="badge badge-green">Available</span>';
+        html+='<tr><td><strong style="font-weight:500">'+m.name+'</strong></td><td>'+totalBought+' '+m.unit+'</td><td>'+totalUsed.toFixed(1)+' '+m.unit+'</td><td><strong style="font-weight:500">'+(remaining<0?0:remaining.toFixed(1))+' '+m.unit+'</strong><div class="stock-bar-wrap"><div class="stock-bar" style="width:'+pct+'%;background:'+barColor+'"></div></div></td><td>'+status+'</td></tr>';
+      });
+      stockEl.innerHTML=html+'</tbody></table></div>';
+    });
+  });
+  unsubs.push(unsub1);
+
+  var unsub2=fdb.collection('usage').orderBy('createdAt','desc').onSnapshot(function(snap){
+    if(snap.empty){usageEl.innerHTML='<div class="empty">No usage logged yet.</div>';return;}
+    var html='<div class="tbl-wrap"><table><thead><tr><th>Date</th><th>Material</th><th>Qty Used</th><th>By</th>'+(USERS[currentUser].role==='owner'?'<th></th>':'')+'</tr></thead><tbody>';
+    snap.docs.forEach(function(doc){
+      var u=doc.data(),id=doc.id;
+      var who=u.addedBy==='julie'?'<span class="badge badge-blue">Julie</span>':'<span class="badge badge-brown">Owner</span>';
+      var del=USERS[currentUser].role==='owner'?'<td><button class="btn btn-danger" onclick="deleteUsage(\''+id+'\')">Del</button></td>':'';
+      html+='<tr><td>'+u.date+'</td><td>'+u.materialName+'</td><td>'+u.qtyUsed+' '+u.unit+'</td><td>'+who+'</td>'+del+'</tr>';
+    });
+    usageEl.innerHTML=html+'</tbody></table></div>';
+  });
+  unsubs.push(unsub2);
+}
+function deleteUsage(id) {
+  if(USERS[currentUser].role!=='owner'){showToast('Admin only');return;}
+  if(!confirm('Delete this usage entry?')) return;
+  fdb.collection('usage').doc(id).delete().then(function(){ logAction('Deleted usage','id:'+id); showToast('Deleted'); });
+}
+
+// ── SALES ────────────────────────────────────────────────────
+function populateSaleDropdown() {
+  var sel=document.getElementById('sale-product'); if(!sel) return;
+  var prev=sel.value;
+  sel.innerHTML='<option value="">-- Select product --</option>';
+  cachedProducts.forEach(function(p){ sel.innerHTML+='<option value="'+p.id+'">'+p.name+' (₱'+p.sellingPrice.toFixed(2)+'/pc)</option>'; });
+  if(prev) sel.value=prev;
+}
+function addSale() {
+  var pid=document.getElementById('sale-product').value;
+  var qty=parseInt(document.getElementById('sale-qty').value);
+  var d=document.getElementById('sale-date').value;
+  if(!pid||isNaN(qty)||qty<1){showToast('Please select product and qty');return;}
+  var prod=cachedProducts.find(function(p){return p.id===pid;});
+  if(!prod){showToast('Product not found');return;}
+  var revenue=prod.sellingPrice*qty,tubo=prod.profitPc*qty;
+  fdb.collection('sales').add({ productId:pid,productName:prod.name,qty:qty,sellingPrice:prod.sellingPrice,revenue:revenue,tubo:tubo,youShare:tubo*0.7,julieShare:tubo*0.3,date:d||new Date().toISOString().slice(0,10),addedBy:currentUser,addedByDisplay:USERS[currentUser].display,createdAt:firebase.firestore.FieldValue.serverTimestamp() })
+  .then(function(){ logAction('Encoded sale',qty+'x "'+prod.name+'" on '+d+' by '+USERS[currentUser].display); document.getElementById('sale-qty').value=''; showToast('✅ Sale saved! Tubo: ₱'+tubo.toFixed(2)); });
+}
+function deleteSale(id) {
+  if(USERS[currentUser].role!=='owner'){showToast('Admin only');return;}
+  if(!confirm('Delete this sale?')) return;
+  fdb.collection('sales').doc(id).delete().then(function(){ logAction('Deleted sale','id:'+id); showToast('Deleted'); });
+}
+function listenSales() {
+  var el=document.getElementById('sales-list');
+  var isOwner=USERS[currentUser].role==='owner';
+  el.innerHTML='<div class="loading">Loading...</div>';
+  var unsub=fdb.collection('sales').orderBy('createdAt','desc').onSnapshot(function(snap){
+    if(snap.empty){el.innerHTML='<div class="empty"><div class="empty-icon">📊</div>No sales yet. Start encoding!</div>';return;}
+    var html='<div class="tbl-wrap"><table><thead><tr><th>Date</th><th>Product</th><th>Qty</th><th>Revenue</th><th>Tubo</th>'+(isOwner?'<th>You 70%</th><th>Julie 30%</th>':'')+'<th>By</th>'+(isOwner?'<th></th>':'')+'</tr></thead><tbody>';
+    snap.docs.forEach(function(doc){
+      var s=doc.data(),id=doc.id;
+      var who=s.addedBy==='julie'?'<span class="badge badge-blue">Julie</span>':'<span class="badge badge-brown">Owner</span>';
+      var split=isOwner?'<td style="color:var(--green);font-weight:500">₱'+s.youShare.toFixed(2)+'</td><td style="color:var(--blue);font-weight:500">₱'+s.julieShare.toFixed(2)+'</td>':'';
+      var del=isOwner?'<td><button class="btn btn-danger" onclick="deleteSale(\''+id+'\')">Del</button></td>':'';
+      html+='<tr><td>'+s.date+'</td><td>'+s.productName+'</td><td>'+s.qty+'</td><td>₱'+s.revenue.toFixed(2)+'</td><td>₱'+s.tubo.toFixed(2)+'</td>'+split+'<td>'+who+'</td>'+del+'</tr>';
+    });
+    el.innerHTML=html+'</tbody></table></div>';
+  });
+  unsubs.push(unsub);
+}
+
+// ── TUBO ─────────────────────────────────────────────────────
+function listenTubo() {
+  if(USERS[currentUser].role!=='owner'){goPage('dashboard');return;}
+  var mEl=document.getElementById('tubo-metrics'),tEl=document.getElementById('tubo-table'),sEl=document.getElementById('tubo-splits');
+  mEl.innerHTML='';tEl.innerHTML='<div class="loading">Loading...</div>';sEl.innerHTML='';
+  var unsub=fdb.collection('products').orderBy('margin','desc').onSnapshot(function(snap){
+    if(snap.empty){tEl.innerHTML='<div class="empty">No products yet.</div>';return;}
+    var prods=snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+    var tb=prods.reduce(function(s,p){return s+(p.profitPc*p.batchQty);},0);
+    var avg=prods.reduce(function(s,p){return s+p.margin;},0)/prods.length;
+    mEl.innerHTML='<div class="metric"><div class="metric-label">Total batch tubo</div><div class="metric-val">₱'+tb.toFixed(2)+'</div><div class="metric-sub">gross only</div></div>'+
+      '<div class="metric you"><div class="metric-label">Your share (70%)</div><div class="metric-val" style="color:var(--green)">₱'+(tb*0.7).toFixed(2)+'</div><div class="metric-sub">your earnings</div></div>'+
+      '<div class="metric julie"><div class="metric-label">Julie\'s share (30%)</div><div class="metric-val" style="color:var(--blue)">₱'+(tb*0.3).toFixed(2)+'</div><div class="metric-sub">Julie\'s cut</div></div>'+
+      '<div class="metric"><div class="metric-label">Avg margin</div><div class="metric-val">'+avg.toFixed(0)+'%</div><div class="metric-sub">'+prods.length+' products</div></div>';
+    var html='<div class="tbl-wrap"><table><thead><tr><th>Product</th><th>Sell ₱</th><th>Tubo/pc</th><th style="color:var(--green)">You 70%</th><th style="color:var(--blue)">Julie 30%</th><th>Margin</th></tr></thead><tbody>';
+    var splits='';
+    prods.forEach(function(p){
+      var cls=p.margin>=50?'badge-green':p.margin>=30?'badge-amber':'badge-red';
+      html+='<tr><td><strong style="font-weight:500">'+p.name+'</strong></td><td>₱'+p.sellingPrice.toFixed(2)+'</td><td>₱'+p.profitPc.toFixed(2)+'</td><td style="color:var(--green);font-weight:500">₱'+p.youPc.toFixed(2)+'</td><td style="color:var(--blue);font-weight:500">₱'+p.juliePc.toFixed(2)+'</td><td><span class="badge '+cls+'">'+p.margin.toFixed(0)+'%</span></td></tr>';
+      var bt=p.profitPc*p.batchQty;
+      splits+='<div style="margin-bottom:1.25rem"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px"><span style="font-size:14px;font-weight:500">'+p.name+'</span><span style="font-size:12px;color:var(--text-soft)">'+p.batchQty+' pcs · tubo ₱'+bt.toFixed(2)+'</span></div><div class="split-visual"><div class="split-you-bar">You (70%) — ₱'+(bt*0.7).toFixed(2)+'</div><div class="split-julie-bar">Julie — ₱'+(bt*0.3).toFixed(2)+'</div></div></div>';
+    });
+    tEl.innerHTML=html+'</tbody></table></div>'; sEl.innerHTML=splits;
+  });
+  unsubs.push(unsub);
+}
+
+// ── DASHBOARD ────────────────────────────────────────────────
+function renderDashboard() {
+  var today=new Date().toISOString().slice(0,10);
+  var hour=new Date().getHours();
+  var greet=hour<12?'Good morning':hour<17?'Good afternoon':'Good evening';
+  document.getElementById('dash-greeting').textContent=greet+', '+USERS[currentUser].display+'! 🍌';
+  var mEl=document.getElementById('dash-metrics'),todayEl=document.getElementById('dash-today'),splitEl=document.getElementById('dash-split');
+  mEl.innerHTML='<div class="loading">Loading...</div>';
+  fdb.collection('sales').where('date','==',today).get().then(function(snap){
+    var totalRev=0,totalTubo=0,rows='';
+    snap.docs.forEach(function(doc){
+      var s=doc.data(); totalRev+=s.revenue; totalTubo+=s.tubo;
+      var who=s.addedBy==='julie'?'<span class="badge badge-blue">Julie</span>':'<span class="badge badge-brown">Owner</span>';
+      rows+='<tr><td>'+s.productName+'</td><td>'+s.qty+'</td><td>₱'+s.revenue.toFixed(2)+'</td><td>₱'+s.tubo.toFixed(2)+'</td><td>'+who+'</td></tr>';
+    });
+    var isOwner=USERS[currentUser].role==='owner';
+    mEl.innerHTML='<div class="metric"><div class="metric-label">Today\'s revenue</div><div class="metric-val">₱'+totalRev.toFixed(2)+'</div><div class="metric-sub">'+snap.size+' entries</div></div>'+
+      '<div class="metric"><div class="metric-label">Today\'s tubo</div><div class="metric-val">₱'+totalTubo.toFixed(2)+'</div><div class="metric-sub">gross margin</div></div>'+
+      (isOwner?'<div class="metric you"><div class="metric-label">Your share today</div><div class="metric-val" style="color:var(--green)">₱'+(totalTubo*0.7).toFixed(2)+'</div><div class="metric-sub">70%</div></div>'+
+      '<div class="metric julie"><div class="metric-label">Julie\'s share today</div><div class="metric-val" style="color:var(--blue)">₱'+(totalTubo*0.3).toFixed(2)+'</div><div class="metric-sub">30%</div></div>':'');
+    todayEl.innerHTML=!snap.size?'<div class="empty">No sales encoded today yet.</div>':'<div class="tbl-wrap"><table><thead><tr><th>Product</th><th>Qty</th><th>Revenue</th><th>Tubo</th><th>By</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+    if(isOwner) splitEl.innerHTML=!totalTubo?'<div class="empty">No tubo yet today.</div>':'<div class="split-visual"><div class="split-you-bar">You (70%) — ₱'+(totalTubo*0.7).toFixed(2)+'</div><div class="split-julie-bar">Julie — ₱'+(totalTubo*0.3).toFixed(2)+'</div></div>';
+  });
+}
+
+// ── ACTIVITY ─────────────────────────────────────────────────
+function listenActivity() {
+  var el=document.getElementById('activity-log');
+  el.innerHTML='<div class="loading">Loading...</div>';
+  var unsub=fdb.collection('log').orderBy('ts','desc').limit(100).onSnapshot(function(snap){
+    if(snap.empty){el.innerHTML='<div class="empty">No activity yet.</div>';return;}
+    el.innerHTML=snap.docs.map(function(doc){
+      var l=doc.data();
+      return '<div class="log-item"><div class="log-dot '+(l.user==='julie'?'log-by-julie':'log-by-you')+'"></div><div><span style="font-weight:500">'+l.display+'</span> — '+l.action+'<br><span class="log-meta">'+l.detail+'</span><br><span class="log-meta" style="font-size:11px">'+fmtTs(l.ts)+'</span></div></div>';
+    }).join('');
+  });
+  unsubs.push(unsub);
+}
+
+// ── TOAST ────────────────────────────────────────────────────
+var toastTimer;
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){t.classList.remove('show');},2800);
+}
+
+// ── WIRE UP ──────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded',function(){
+  document.getElementById('login-btn').addEventListener('click',doLogin);
+  document.getElementById('login-pass').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+  document.getElementById('logout-btn').addEventListener('click',doLogout);
+  document.getElementById('add-sale-btn').addEventListener('click',addSale);
+  document.getElementById('add-mat-btn').addEventListener('click',addMaterial);
+  document.getElementById('add-prod-btn').addEventListener('click',addProduct);
+  document.getElementById('add-use-btn').addEventListener('click',addUsage);
+  document.querySelectorAll('.nav-item,.mobile-nav-item').forEach(function(btn){
+    btn.addEventListener('click',function(){goPage(this.dataset.page);});
   });
   setLoginRole('owner');
 });
-
-// LOGGING
-function logAction(action, detail) {
-  db.log.unshift({ user: currentUser, display: USERS[currentUser].display, action: action, detail: detail, ts: new Date().toISOString() });
-  if (db.log.length > 200) db.log = db.log.slice(0, 200);
-  saveDB();
-}
-function fmtTs(ts) {
-  var d = new Date(ts);
-  return d.toLocaleDateString('en-PH', { month: 'short', day: 'numeric' }) + ' ' + d.toLocaleTimeString('en-PH', { hour: '2-digit', minute: '2-digit' });
-}
-
-// PRODUCTS
-function addProduct() {
-  if (USERS[currentUser].role !== 'owner') { showToast('Admin only'); return; }
-  var n = document.getElementById('prod-name').value.trim();
-  var sp = parseFloat(document.getElementById('prod-price').value);
-  var qty = parseInt(document.getElementById('prod-qty').value);
-  var rc = parseFloat(document.getElementById('prod-rawcost').value);
-  if (!n || isNaN(sp) || isNaN(qty) || isNaN(rc)) { showToast('Please fill all fields'); return; }
-  var costPc = rc / qty, profitPc = sp - costPc, margin = (profitPc / sp) * 100;
-  db.products.push({ id: Date.now(), name: n, sellingPrice: sp, batchQty: qty, rawCostBatch: rc, costPc: costPc, profitPc: profitPc, margin: margin, youPc: profitPc * 0.7, juliePc: profitPc * 0.3 });
-  logAction('Added product', '"' + n + '" @ ₱' + sp + '/pc');
-  saveDB();
-  document.getElementById('prod-name').value = '';
-  document.getElementById('prod-price').value = '';
-  document.getElementById('prod-qty').value = '';
-  document.getElementById('prod-rawcost').value = '';
-  renderProducts(); populateSaleDropdown(); showToast('"' + n + '" added!');
-}
-
-function deleteProduct(id) {
-  if (USERS[currentUser].role !== 'owner') { showToast('Admin only'); return; }
-  var p = db.products.find(function(x) { return x.id === id; });
-  if (!confirm('Delete "' + p.name + '"?')) return;
-  db.products = db.products.filter(function(x) { return x.id !== id; });
-  logAction('Deleted product', '"' + p.name + '"');
-  saveDB(); renderProducts(); populateSaleDropdown(); showToast('Deleted');
-}
-
-function renderProducts() {
-  var el = document.getElementById('prod-list');
-  if (!db.products.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">🍱</div>No products yet.</div>'; return; }
-  var html = '<div class="tbl-wrap"><table><thead><tr><th>Product</th><th>Sell ₱</th><th>Cost/pc</th><th>Tubo/pc</th><th>You 70%</th><th>Julie 30%</th><th>Margin</th><th></th></tr></thead><tbody>';
-  db.products.forEach(function(p) {
-    var cls = p.margin >= 50 ? 'badge-green' : p.margin >= 30 ? 'badge-amber' : 'badge-red';
-    html += '<tr><td><strong style="font-weight:500">' + p.name + '</strong></td><td>₱' + p.sellingPrice.toFixed(2) + '</td><td>₱' + p.costPc.toFixed(2) + '</td><td>₱' + p.profitPc.toFixed(2) + '</td><td style="color:var(--green);font-weight:500">₱' + p.youPc.toFixed(2) + '</td><td style="color:var(--blue);font-weight:500">₱' + p.juliePc.toFixed(2) + '</td><td><span class="badge ' + cls + '">' + p.margin.toFixed(0) + '%</span></td><td><button class="btn btn-danger" onclick="deleteProduct(' + p.id + ')">Delete</button></td></tr>';
-  });
-  el.innerHTML = html + '</tbody></table></div>';
-}
-
-// MATERIALS
-function addMaterial() {
-  var n = document.getElementById('mat-name').value.trim();
-  var c = parseFloat(document.getElementById('mat-cost').value);
-  var u = document.getElementById('mat-unit').value;
-  var d = document.getElementById('mat-date').value;
-  if (!n || isNaN(c)) { showToast('Please fill name and cost'); return; }
-  db.materials.push({ id: Date.now(), name: n, cost: c, unit: u, date: d || new Date().toISOString().slice(0, 10), addedBy: currentUser });
-  logAction('Added material', '"' + n + '" ₱' + c + ' by ' + USERS[currentUser].display);
-  saveDB();
-  document.getElementById('mat-name').value = '';
-  document.getElementById('mat-cost').value = '';
-  renderMaterials(); showToast('"' + n + '" added!');
-}
-
-function deleteMaterial(id) {
-  if (USERS[currentUser].role !== 'owner') { showToast('Only owner can delete'); return; }
-  var m = db.materials.find(function(x) { return x.id === id; });
-  if (!confirm('Delete "' + m.name + '"?')) return;
-  db.materials = db.materials.filter(function(x) { return x.id !== id; });
-  logAction('Deleted material', '"' + m.name + '"');
-  saveDB(); renderMaterials(); showToast('Deleted');
-}
-
-function renderMaterials() {
-  var el = document.getElementById('mat-list');
-  var isOwner = USERS[currentUser].role === 'owner';
-  if (!db.materials.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">🧂</div>No materials logged yet.</div>'; return; }
-  var sorted = db.materials.slice().sort(function(a, b) { return b.id - a.id; });
-  var html = '<div class="tbl-wrap"><table><thead><tr><th>Material</th><th>Cost</th><th>Unit</th><th>Date</th><th>By</th>' + (isOwner ? '<th></th>' : '') + '</tr></thead><tbody>';
-  sorted.forEach(function(m) {
-    var who = m.addedBy === 'julie' ? '<span class="badge badge-blue">Julie</span>' : '<span class="badge badge-brown">Owner</span>';
-    var del = isOwner ? '<td><button class="btn btn-danger" onclick="deleteMaterial(' + m.id + ')">Delete</button></td>' : '';
-    html += '<tr><td><strong style="font-weight:500">' + m.name + '</strong></td><td>₱' + m.cost.toFixed(2) + '</td><td>' + m.unit + '</td><td>' + m.date + '</td><td>' + who + '</td>' + del + '</tr>';
-  });
-  el.innerHTML = html + '</tbody></table></div>';
-}
-
-// SALES
-function populateSaleDropdown() {
-  var sel = document.getElementById('sale-product'); if (!sel) return;
-  var prev = sel.value;
-  sel.innerHTML = '<option value="">-- Select product --</option>';
-  db.products.forEach(function(p) {
-    sel.innerHTML += '<option value="' + p.id + '">' + p.name + ' (₱' + p.sellingPrice.toFixed(2) + '/pc)</option>';
-  });
-  if (prev) sel.value = prev;
-}
-
-function addSale() {
-  var pid = parseInt(document.getElementById('sale-product').value);
-  var qty = parseInt(document.getElementById('sale-qty').value);
-  var d = document.getElementById('sale-date').value;
-  if (!pid || isNaN(qty) || qty < 1) { showToast('Please select product and qty'); return; }
-  var prod = db.products.find(function(p) { return p.id === pid; });
-  if (!prod) { showToast('Product not found'); return; }
-  var revenue = prod.sellingPrice * qty;
-  var tubo = prod.profitPc * qty;
-  db.sales.push({ id: Date.now(), productId: pid, productName: prod.name, qty: qty, sellingPrice: prod.sellingPrice, revenue: revenue, tubo: tubo, youShare: tubo * 0.7, julieShare: tubo * 0.3, date: d || new Date().toISOString().slice(0, 10), addedBy: currentUser });
-  logAction('Encoded sale', qty + 'x "' + prod.name + '" on ' + d + ' by ' + USERS[currentUser].display);
-  saveDB();
-  document.getElementById('sale-qty').value = '';
-  renderSales(); showToast('Sale saved! Tubo: ₱' + tubo.toFixed(2));
-}
-
-function deleteSale(id) {
-  if (USERS[currentUser].role !== 'owner') { showToast('Admin only'); return; }
-  var s = db.sales.find(function(x) { return x.id === id; });
-  if (!confirm('Delete this sale?')) return;
-  db.sales = db.sales.filter(function(x) { return x.id !== id; });
-  logAction('Deleted sale', s.qty + 'x "' + s.productName + '"');
-  saveDB(); renderSales(); showToast('Deleted');
-}
-
-function renderSales() {
-  var el = document.getElementById('sales-list');
-  var isOwner = USERS[currentUser].role === 'owner';
-  if (!db.sales.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📊</div>No sales yet. Start encoding!</div>'; return; }
-  var sorted = db.sales.slice().sort(function(a, b) { return b.id - a.id; });
-  var html = '<div class="tbl-wrap"><table><thead><tr><th>Date</th><th>Product</th><th>Qty</th><th>Revenue</th><th>Tubo</th><th>You 70%</th><th>Julie 30%</th><th>By</th>' + (isOwner ? '<th></th>' : '') + '</tr></thead><tbody>';
-  sorted.forEach(function(s) {
-    var who = s.addedBy === 'julie' ? '<span class="badge badge-blue">Julie</span>' : '<span class="badge badge-brown">Owner</span>';
-    var del = isOwner ? '<td><button class="btn btn-danger" onclick="deleteSale(' + s.id + ')">Del</button></td>' : '';
-    html += '<tr><td>' + s.date + '</td><td>' + s.productName + '</td><td>' + s.qty + '</td><td>₱' + s.revenue.toFixed(2) + '</td><td>₱' + s.tubo.toFixed(2) + '</td><td style="color:var(--green);font-weight:500">₱' + s.youShare.toFixed(2) + '</td><td style="color:var(--blue);font-weight:500">₱' + s.julieShare.toFixed(2) + '</td><td>' + who + '</td>' + del + '</tr>';
-  });
-  el.innerHTML = html + '</tbody></table></div>';
-}
-
-// TUBO
-function renderTubo() {
-  var mEl = document.getElementById('tubo-metrics');
-  var tEl = document.getElementById('tubo-table');
-  var sEl = document.getElementById('tubo-splits');
-  if (!db.products.length) { mEl.innerHTML = ''; tEl.innerHTML = '<div class="empty">No products yet.</div>'; sEl.innerHTML = ''; return; }
-  var sorted = db.products.slice().sort(function(a, b) { return b.margin - a.margin; });
-  var totalBatch = db.products.reduce(function(s, p) { return s + (p.profitPc * p.batchQty); }, 0);
-  var totalYou = totalBatch * 0.7, totalJulie = totalBatch * 0.3;
-  var avgMargin = db.products.reduce(function(s, p) { return s + p.margin; }, 0) / db.products.length;
-  mEl.innerHTML = '<div class="metric"><div class="metric-label">Total batch tubo</div><div class="metric-val">₱' + totalBatch.toFixed(2) + '</div><div class="metric-sub">gross only</div></div>' +
-    '<div class="metric you"><div class="metric-label">Your share (70%)</div><div class="metric-val" style="color:var(--green)">₱' + totalYou.toFixed(2) + '</div><div class="metric-sub">your earnings</div></div>' +
-    '<div class="metric julie"><div class="metric-label">Julie\'s share (30%)</div><div class="metric-val" style="color:var(--blue)">₱' + totalJulie.toFixed(2) + '</div><div class="metric-sub">Julie\'s cut</div></div>' +
-    '<div class="metric"><div class="metric-label">Avg margin</div><div class="metric-val">' + avgMargin.toFixed(0) + '%</div><div class="metric-sub">' + db.products.length + ' products</div></div>';
-  var html = '<div class="tbl-wrap"><table><thead><tr><th>Product</th><th>Sell ₱</th><th>Tubo/pc</th><th style="color:var(--green)">You 70%</th><th style="color:var(--blue)">Julie 30%</th><th>Margin</th></tr></thead><tbody>';
-  sorted.forEach(function(p) {
-    var cls = p.margin >= 50 ? 'badge-green' : p.margin >= 30 ? 'badge-amber' : 'badge-red';
-    html += '<tr><td><strong style="font-weight:500">' + p.name + '</strong></td><td>₱' + p.sellingPrice.toFixed(2) + '</td><td>₱' + p.profitPc.toFixed(2) + '</td><td style="color:var(--green);font-weight:500">₱' + p.youPc.toFixed(2) + '</td><td style="color:var(--blue);font-weight:500">₱' + p.juliePc.toFixed(2) + '</td><td><span class="badge ' + cls + '">' + p.margin.toFixed(0) + '%</span></td></tr>';
-  });
-  tEl.innerHTML = html + '</tbody></table></div>';
-  var splits = '';
-  sorted.forEach(function(p) {
-    var bt = p.profitPc * p.batchQty;
-    splits += '<div style="margin-bottom:1.25rem"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px"><span style="font-size:14px;font-weight:500">' + p.name + '</span><span style="font-size:12px;color:var(--text-soft)">' + p.batchQty + ' pcs · tubo ₱' + bt.toFixed(2) + '</span></div><div class="split-visual"><div class="split-you-bar">You (70%) — ₱' + (bt * 0.7).toFixed(2) + '</div><div class="split-julie-bar">Julie — ₱' + (bt * 0.3).toFixed(2) + '</div></div></div>';
-  });
-  sEl.innerHTML = splits;
-}
-
-// DASHBOARD
-function renderDashboard() {
-  var today = new Date().toISOString().slice(0, 10);
-  var hour = new Date().getHours();
-  var greet = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
-  document.getElementById('dash-greeting').textContent = greet + ', ' + USERS[currentUser].display + '! 👋';
-  var todaySales = db.sales.filter(function(s) { return s.date === today; });
-  var totalRev = todaySales.reduce(function(s, x) { return s + x.revenue; }, 0);
-  var totalTubo = todaySales.reduce(function(s, x) { return s + x.tubo; }, 0);
-  var totalMats = db.materials.filter(function(m) { return m.date === today; }).reduce(function(s, m) { return s + m.cost; }, 0);
-  document.getElementById('dash-metrics').innerHTML =
-    '<div class="metric"><div class="metric-label">Today\'s revenue</div><div class="metric-val">₱' + totalRev.toFixed(2) + '</div><div class="metric-sub">' + todaySales.length + ' entries</div></div>' +
-    '<div class="metric"><div class="metric-label">Today\'s tubo</div><div class="metric-val">₱' + totalTubo.toFixed(2) + '</div><div class="metric-sub">gross margin</div></div>' +
-    '<div class="metric you"><div class="metric-label">Your share today</div><div class="metric-val" style="color:var(--green)">₱' + (totalTubo * 0.7).toFixed(2) + '</div><div class="metric-sub">70%</div></div>' +
-    '<div class="metric julie"><div class="metric-label">Julie\'s share today</div><div class="metric-val" style="color:var(--blue)">₱' + (totalTubo * 0.3).toFixed(2) + '</div><div class="metric-sub">30%</div></div>';
-  var todayEl = document.getElementById('dash-today');
-  if (!todaySales.length) { todayEl.innerHTML = '<div class="empty">No sales encoded today yet.</div>'; }
-  else {
-    var h = '<div class="tbl-wrap"><table><thead><tr><th>Product</th><th>Qty</th><th>Revenue</th><th>Tubo</th><th>By</th></tr></thead><tbody>';
-    todaySales.forEach(function(s) {
-      var who = s.addedBy === 'julie' ? '<span class="badge badge-blue">Julie</span>' : '<span class="badge badge-brown">Owner</span>';
-      h += '<tr><td>' + s.productName + '</td><td>' + s.qty + '</td><td>₱' + s.revenue.toFixed(2) + '</td><td>₱' + s.tubo.toFixed(2) + '</td><td>' + who + '</td></tr>';
-    });
-    todayEl.innerHTML = h + '</tbody></table></div>';
-  }
-  var splitEl = document.getElementById('dash-split');
-  if (!totalTubo) { splitEl.innerHTML = '<div class="empty">No tubo yet today.</div>'; }
-  else { splitEl.innerHTML = '<div class="split-visual"><div class="split-you-bar">You (70%) — ₱' + (totalTubo * 0.7).toFixed(2) + '</div><div class="split-julie-bar">Julie — ₱' + (totalTubo * 0.3).toFixed(2) + '</div></div><p style="font-size:12px;color:var(--text-soft);margin-top:8px">Materials spent today: ₱' + totalMats.toFixed(2) + '</p>'; }
-}
-
-// ACTIVITY
-function renderActivity() {
-  var el = document.getElementById('activity-log');
-  if (!db.log.length) { el.innerHTML = '<div class="empty">No activity yet.</div>'; return; }
-  el.innerHTML = db.log.map(function(l) {
-    return '<div class="log-item"><div class="log-dot ' + (l.user === 'julie' ? 'log-by-julie' : 'log-by-you') + '"></div><div><span style="font-weight:500">' + l.display + '</span> — ' + l.action + '<br><span class="log-meta">' + l.detail + '</span><br><span class="log-meta" style="font-size:11px">' + fmtTs(l.ts) + '</span></div></div>';
-  }).join('');
-}
-
-// TOAST
-var toastTimer;
-function showToast(msg) {
-  var t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(function() { t.classList.remove('show'); }, 2500);
-}
 </script>
 </body>
 </html>
