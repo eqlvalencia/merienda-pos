@@ -190,7 +190,7 @@ tr:hover td{background:var(--cream)}
 </div>
 
 <!-- APP -->
-<div id="app">
+<div id="app" style="display:none">
   <header>
     <div class="header-left">
       <span class="header-logo">🍮 Merienda POS</span>
@@ -404,16 +404,24 @@ function setLoginRole(r){
 }
 
 function doLogin(){
-  const u=document.getElementById('login-user').value.trim().toLowerCase();
-  const p=document.getElementById('login-pass').value;
-  const err=document.getElementById('login-error');
-  if(!USERS[u]||USERS[u].pass!==p){ err.textContent='Wrong username or password.'; return; }
-  currentUser=u;
-  err.textContent='';
-  document.getElementById('login-screen').style.display='none';
-  document.getElementById('app').style.display='flex';
-  setupUI();
-  goPage('dashboard');
+  try{
+    const u=document.getElementById('login-user').value.trim().toLowerCase();
+    const p=document.getElementById('login-pass').value;
+    const err=document.getElementById('login-error');
+    if(!u||!p){err.textContent='Please enter username and password.';return;}
+    if(!USERS[u]||USERS[u].pass!==p){err.textContent='Wrong username or password.';return;}
+    currentUser=u;
+    err.textContent='';
+    const ls=document.getElementById('login-screen');
+    const app=document.getElementById('app');
+    ls.style.display='none';
+    app.style.cssText='display:flex;flex-direction:column;min-height:100vh;';
+    setupUI();
+    goPage('dashboard');
+  }catch(e){
+    document.getElementById('login-error').textContent='Something went wrong. Please refresh and try again.';
+    console.error(e);
+  }
 }
 
 function doLogout(){
