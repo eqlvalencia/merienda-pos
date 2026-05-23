@@ -253,12 +253,12 @@ tr:hover td{background:var(--cream)}
       <!-- TUBO & SPLIT -->
       <div id="page-tubo" class="page">
         <h2 class="page-title">Tubo & Split</h2>
-        <p class="page-sub">Gross margin — 70% You · 30% Julie (before electricity & salary)</p>
+        <p class="page-sub">Gross margin — 70% Valencias · 30% Julie (before electricity & salary)</p>
         <div class="metrics-grid" id="tubo-metrics"></div>
         <div class="card"><div class="card-title">Per product breakdown</div><div id="tubo-table"></div></div>
         <div class="card"><div class="card-title">Per batch split</div><div id="tubo-splits"></div></div>
         <div class="card" style="background:var(--warm);border-color:var(--border-mid)">
-          <p style="font-size:12px;color:var(--text-mid);line-height:1.7">⚠️ These margins are <strong>before</strong> electricity, gas, and salary. Deduct daily operating costs from the <em>You (70%)</em> side to get your actual take-home.</p>
+          <p style="font-size:12px;color:var(--text-mid);line-height:1.7">⚠️ These margins are <strong>before</strong> electricity, gas, and salary. Deduct daily operating costs from the <em>Valencias (70%)</em> side to get your actual take-home.</p>
         </div>
       </div>
 
@@ -550,7 +550,7 @@ function listenSales() {
   el.innerHTML='<div class="loading">Loading...</div>';
   var unsub=fdb.collection('sales').orderBy('createdAt','desc').onSnapshot(function(snap){
     if(snap.empty){el.innerHTML='<div class="empty"><div class="empty-icon">📊</div>No sales yet. Start encoding!</div>';return;}
-    var html='<div class="tbl-wrap"><table><thead><tr><th>Date</th><th>Product</th><th>Qty</th><th>Revenue</th><th>Tubo</th>'+(isOwner?'<th>You 70%</th><th>Julie 30%</th>':'')+'<th>By</th>'+(isOwner?'<th></th>':'')+'</tr></thead><tbody>';
+    var html='<div class="tbl-wrap"><table><thead><tr><th>Date</th><th>Product</th><th>Qty</th><th>Revenue</th><th>Tubo</th>'+(isOwner?'<th>Valencias 70%</th><th>Julie 30%</th>':'')+'<th>By</th>'+(isOwner?'<th></th>':'')+'</tr></thead><tbody>';
     snap.docs.forEach(function(doc){
       var s=doc.data(),id=doc.id;
       var who=s.addedBy==='julie'?'<span class="badge badge-blue">Julie</span>':'<span class="badge badge-brown">Owner</span>';
@@ -573,7 +573,7 @@ function listenTubo() {
     var tb=prods.reduce(function(s,p){return s+(p.profitPc*p.batchQty);},0);
     var avg=prods.reduce(function(s,p){return s+p.margin;},0)/prods.length;
     mEl.innerHTML='<div class="metric"><div class="metric-label">Total batch tubo</div><div class="metric-val">₱'+tb.toFixed(2)+'</div><div class="metric-sub">gross only</div></div>'+
-      '<div class="metric you"><div class="metric-label">Your share (70%)</div><div class="metric-val" style="color:var(--green)">₱'+(tb*0.7).toFixed(2)+'</div><div class="metric-sub">your earnings</div></div>'+
+      '<div class="metric you"><div class="metric-label">Valencias (70%)</div><div class="metric-val" style="color:var(--green)">₱'+(tb*0.7).toFixed(2)+'</div><div class="metric-sub">your earnings</div></div>'+
       '<div class="metric julie"><div class="metric-label">Julie\'s share (30%)</div><div class="metric-val" style="color:var(--blue)">₱'+(tb*0.3).toFixed(2)+'</div><div class="metric-sub">Julie\'s cut</div></div>'+
       '<div class="metric"><div class="metric-label">Avg margin</div><div class="metric-val">'+avg.toFixed(0)+'%</div><div class="metric-sub">'+prods.length+' products</div></div>';
     var html='<div class="tbl-wrap"><table><thead><tr><th>Product</th><th>Sell ₱</th><th>Tubo/pc</th><th style="color:var(--green)">You 70%</th><th style="color:var(--blue)">Julie 30%</th><th>Margin</th></tr></thead><tbody>';
@@ -582,7 +582,7 @@ function listenTubo() {
       var cls=p.margin>=50?'badge-green':p.margin>=30?'badge-amber':'badge-red';
       html+='<tr><td><strong style="font-weight:500">'+p.name+'</strong></td><td>₱'+p.sellingPrice.toFixed(2)+'</td><td>₱'+p.profitPc.toFixed(2)+'</td><td style="color:var(--green);font-weight:500">₱'+p.youPc.toFixed(2)+'</td><td style="color:var(--blue);font-weight:500">₱'+p.juliePc.toFixed(2)+'</td><td><span class="badge '+cls+'">'+p.margin.toFixed(0)+'%</span></td></tr>';
       var bt=p.profitPc*p.batchQty;
-      splits+='<div style="margin-bottom:1.25rem"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px"><span style="font-size:14px;font-weight:500">'+p.name+'</span><span style="font-size:12px;color:var(--text-soft)">'+p.batchQty+' pcs · tubo ₱'+bt.toFixed(2)+'</span></div><div class="split-visual"><div class="split-you-bar">You (70%) — ₱'+(bt*0.7).toFixed(2)+'</div><div class="split-julie-bar">Julie — ₱'+(bt*0.3).toFixed(2)+'</div></div></div>';
+      splits+='<div style="margin-bottom:1.25rem"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px"><span style="font-size:14px;font-weight:500">'+p.name+'</span><span style="font-size:12px;color:var(--text-soft)">'+p.batchQty+' pcs · tubo ₱'+bt.toFixed(2)+'</span></div><div class="split-visual"><div class="split-you-bar">Valencias (70%) — ₱'+(bt*0.7).toFixed(2)+'</div><div class="split-julie-bar">Julie — ₱'+(bt*0.3).toFixed(2)+'</div></div></div>';
     });
     tEl.innerHTML=html+'</tbody></table></div>'; sEl.innerHTML=splits;
   });
@@ -607,10 +607,10 @@ function renderDashboard() {
     var isOwner=USERS[currentUser].role==='owner';
     mEl.innerHTML='<div class="metric"><div class="metric-label">Today\'s revenue</div><div class="metric-val">₱'+totalRev.toFixed(2)+'</div><div class="metric-sub">'+snap.size+' entries</div></div>'+
       '<div class="metric"><div class="metric-label">Today\'s tubo</div><div class="metric-val">₱'+totalTubo.toFixed(2)+'</div><div class="metric-sub">gross margin</div></div>'+
-      (isOwner?'<div class="metric you"><div class="metric-label">Your share today</div><div class="metric-val" style="color:var(--green)">₱'+(totalTubo*0.7).toFixed(2)+'</div><div class="metric-sub">70%</div></div>'+
+      (isOwner?'<div class="metric you"><div class="metric-label">Valencias share today</div><div class="metric-val" style="color:var(--green)">₱'+(totalTubo*0.7).toFixed(2)+'</div><div class="metric-sub">70%</div></div>'+
       '<div class="metric julie"><div class="metric-label">Julie\'s share today</div><div class="metric-val" style="color:var(--blue)">₱'+(totalTubo*0.3).toFixed(2)+'</div><div class="metric-sub">30%</div></div>':'');
     todayEl.innerHTML=!snap.size?'<div class="empty">No sales encoded today yet.</div>':'<div class="tbl-wrap"><table><thead><tr><th>Product</th><th>Qty</th><th>Revenue</th><th>Tubo</th><th>By</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
-    if(isOwner) splitEl.innerHTML=!totalTubo?'<div class="empty">No tubo yet today.</div>':'<div class="split-visual"><div class="split-you-bar">You (70%) — ₱'+(totalTubo*0.7).toFixed(2)+'</div><div class="split-julie-bar">Julie — ₱'+(totalTubo*0.3).toFixed(2)+'</div></div>';
+    if(isOwner) splitEl.innerHTML=!totalTubo?'<div class="empty">No tubo yet today.</div>':'<div class="split-visual"><div class="split-you-bar">Valencias (70%) — ₱'+(totalTubo*0.7).toFixed(2)+'</div><div class="split-julie-bar">Julie — ₱'+(totalTubo*0.3).toFixed(2)+'</div></div>';
   });
 }
 
