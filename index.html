@@ -159,14 +159,17 @@ tr:hover td{background:var(--cream)}
         <button class="nav-item" id="nav-sales" data-page="sales">🧾 Daily Sales</button>
         <button class="nav-item" id="nav-materials" data-page="materials">📦 Raw Materials</button>
         <button class="nav-item" id="nav-stock" data-page="stock">📉 Stock Tracker</button>
-        <button class="nav-item" id="nav-products-julie" data-page="products" style="display:none">🍌 Products</button>
       </div>
       <!-- admin only -->
       <div class="nav-divider" id="admin-divider"></div>
-      <div class="nav-section" id="admin-nav">
-        <div class="nav-label">Admin Only</div>
+      <div class="nav-section">
+        <div class="nav-label">Products & Tubo</div>
         <button class="nav-item" id="nav-products" data-page="products">🍌 Products</button>
         <button class="nav-item" id="nav-tubo" data-page="tubo">💰 Tubo & Split</button>
+      </div>
+      <div class="nav-divider" id="activity-divider"></div>
+      <div class="nav-section" id="admin-nav">
+        <div class="nav-label">Admin Only</div>
         <button class="nav-item" id="nav-activity" data-page="activity">🕐 Activity Log</button>
       </div>
     </nav>
@@ -251,12 +254,9 @@ tr:hover td{background:var(--cream)}
           <p class="hint">Salary and electricity not included — gross tubo only.</p>
         </div>
         <div class="card"><div class="card-title">Products list</div><div id="prod-list"><div class="loading">Loading...</div></div></div>
-        <div class="card" style="background:var(--warm);border-color:var(--border-mid)">
-          <p style="font-size:12px;color:var(--text-mid);line-height:1.7">⚠️ The margins shown above are <strong>before</strong> electricity, gas, and salary. These are gross tubo only — actual take-home will be lower once operating costs are deducted.</p>
-        </div>
       </div>
 
-      <!-- TUBO & SPLIT (owner only) -->
+      <!-- TUBO & SPLIT -->
       <div id="page-tubo" class="page">
         <h2 class="page-title">Tubo & Split</h2>
         <p class="page-sub">Gross margin — 70% You · 30% Julie (before electricity & salary)</p>
@@ -285,6 +285,7 @@ tr:hover td{background:var(--cream)}
       <button class="mobile-nav-item" id="mnav-materials" data-page="materials">📦<br>Materials</button>
       <button class="mobile-nav-item" id="mnav-stock" data-page="stock">📉<br>Stock</button>
       <button class="mobile-nav-item" id="mnav-products" data-page="products">🍌<br>Products</button>
+      <button class="mobile-nav-item" id="mnav-tubo" data-page="tubo">💰<br>Tubo</button>
     </div>
   </div>
 </div>
@@ -355,14 +356,12 @@ function setupUI() {
   ['sale-date','mat-date','use-date'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=today; });
   if (u.role==='julie') {
     document.getElementById('admin-nav').style.display='none';
-    document.getElementById('admin-divider').style.display='none';
+    document.getElementById('activity-divider').style.display='none';
     document.getElementById('owner-split-card').style.display='none';
-    document.getElementById('nav-products-julie').style.display='block';
   } else {
     document.getElementById('admin-nav').style.display='block';
-    document.getElementById('admin-divider').style.display='block';
+    document.getElementById('activity-divider').style.display='block';
     document.getElementById('owner-split-card').style.display='block';
-    document.getElementById('nav-products-julie').style.display='none';
   }
 }
 
@@ -371,7 +370,7 @@ function goPage(p) {
   document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active');});
   document.querySelectorAll('.nav-item,.mobile-nav-item').forEach(function(el){el.classList.remove('active');});
   var pg=document.getElementById('page-'+p); if(pg) pg.classList.add('active');
-  ['nav-'+p,'nav-'+p+'-julie','mnav-'+p].forEach(function(id){ var el=document.getElementById(id); if(el) el.classList.add('active'); });
+  ['nav-'+p,'mnav-'+p].forEach(function(id){ var el=document.getElementById(id); if(el) el.classList.add('active'); });
   if(p==='dashboard') renderDashboard();
   if(p==='sales') listenSales();
   if(p==='materials') listenMaterials();
