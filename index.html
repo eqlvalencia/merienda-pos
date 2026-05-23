@@ -152,18 +152,12 @@ tr:hover td{background:var(--cream)}
 
   <div class="app-body">
     <nav class="sidebar">
-      <!-- shared pages -->
       <div class="nav-section">
         <div class="nav-label">Business</div>
         <button class="nav-item active" id="nav-dashboard" data-page="dashboard">📊 Dashboard</button>
         <button class="nav-item" id="nav-sales" data-page="sales">🧾 Daily Sales</button>
         <button class="nav-item" id="nav-materials" data-page="materials">📦 Raw Materials</button>
         <button class="nav-item" id="nav-stock" data-page="stock">📉 Stock Tracker</button>
-      </div>
-      <!-- admin only -->
-      <div class="nav-divider" id="admin-divider"></div>
-      <div class="nav-section">
-        <div class="nav-label">Products & Tubo</div>
         <button class="nav-item" id="nav-products" data-page="products">🍌 Products</button>
         <button class="nav-item" id="nav-tubo" data-page="tubo">💰 Tubo & Split</button>
       </div>
@@ -356,11 +350,9 @@ function setupUI() {
   ['sale-date','mat-date','use-date'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=today; });
   if (u.role==='julie') {
     document.getElementById('admin-nav').style.display='none';
-    document.getElementById('activity-divider').style.display='none';
     document.getElementById('owner-split-card').style.display='none';
   } else {
     document.getElementById('admin-nav').style.display='block';
-    document.getElementById('activity-divider').style.display='block';
     document.getElementById('owner-split-card').style.display='block';
   }
 }
