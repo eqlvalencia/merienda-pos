@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merienda POS — Shared Business Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #FDF6EC;
+  --warm: #F5E6C8;
+  --brown: #5C3D1E;
+  --brown-light: #8B5E3C;
+  --brown-pale: #C8956C;
+  --green: #2D6A4F;
+  --green-light: #52B788;
+  --green-pale: #D8F3DC;
+  --blue: #1565C0;
+  --blue-pale: #E3F2FD;
+  --amber: #E65100;
+  --amber-pale: #FFF3E0;
+  --red: #C62828;
+  --red-pale: #FFEBEE;
+  --text: #2C1810;
+  --text-mid: #6B4226;
+  --text-soft: #A07850;
+  --border: rgba(92,61,30,0.15);
+  --border-mid: rgba(92,61,30,0.25);
+  --shadow: 0 2px 12px rgba(92,61,30,0.10);
+  --shadow-lg: 0 8px 32px rgba(92,61,30,0.15);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh}
+h1,h2,h3{font-family:'DM Serif Display',serif}
+
+/* LOGIN SCREEN */
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--cream);position:relative;overflow:hidden}
+#login-screen::before{content:'';position:absolute;top:-80px;right:-80px;width:340px;height:340px;background:var(--warm);border-radius:50%;opacity:0.6}
+#login-screen::after{content:'';position:absolute;bottom:-60px;left:-60px;width:260px;height:260px;background:var(--warm);border-radius:50%;opacity:0.4}
+.login-card{background:#fff;border-radius:20px;padding:2.5rem 2rem;width:100%;max-width:380px;box-shadow:var(--shadow-lg);position:relative;z-index:1;border:0.5px solid var(--border)}
+.login-logo{text-align:center;margin-bottom:1.5rem}
+.login-logo h1{font-size:2rem;color:var(--brown);line-height:1.1}
+.login-logo p{font-size:13px;color:var(--text-soft);margin-top:6px}
+.login-tabs{display:flex;border:0.5px solid var(--border-mid);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:1.5rem}
+.login-tab{flex:1;padding:10px;text-align:center;font-size:13px;cursor:pointer;background:#fff;color:var(--text-soft);transition:all 0.2s;border:none;font-family:'DM Sans',sans-serif}
+.login-tab.active{background:var(--brown);color:#fff;font-weight:500}
+.form-group{margin-bottom:1rem}
+.form-group label{font-size:12px;font-weight:500;color:var(--text-mid);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.04em}
+.form-group input{width:100%;padding:10px 14px;border:0.5px solid var(--border-mid);border-radius:var(--radius-sm);font-size:14px;background:var(--cream);color:var(--text);font-family:'DM Sans',sans-serif;transition:border-color 0.2s}
+.form-group input:focus{outline:none;border-color:var(--brown-pale)}
+.btn-login{width:100%;padding:12px;background:var(--brown);color:#fff;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.2s;margin-top:0.5rem}
+.btn-login:hover{background:var(--brown-light)}
+.login-error{font-size:12px;color:var(--red);margin-top:8px;text-align:center;min-height:18px}
+
+/* APP LAYOUT */
+#app{display:none;min-height:100vh;flex-direction:column}
+header{background:var(--brown);color:#fff;padding:0 1.5rem;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(92,61,30,0.3)}
+.header-left{display:flex;align-items:center;gap:12px}
+.header-logo{font-family:'DM Serif Display',serif;font-size:1.3rem;color:#fff}
+.header-badge{font-size:11px;background:rgba(255,255,255,0.2);padding:3px 10px;border-radius:20px;color:rgba(255,255,255,0.9)}
+.user-pill{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.85)}
+.user-avatar{width:28px;height:28px;border-radius:50%;background:var(--brown-pale);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff}
+.btn-logout{background:none;border:0.5px solid rgba(255,255,255,0.3);color:rgba(255,255,255,0.8);padding:5px 12px;border-radius:20px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s}
+.btn-logout:hover{background:rgba(255,255,255,0.1)}
+
+.app-body{display:flex;flex:1}
+.sidebar{width:200px;background:#fff;border-right:0.5px solid var(--border);padding:1.5rem 0;flex-shrink:0;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
+.nav-section{padding:0 1rem;margin-bottom:0.5rem}
+.nav-label{font-size:10px;font-weight:600;color:var(--text-soft);text-transform:uppercase;letter-spacing:0.08em;padding:0 0.5rem;margin-bottom:6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--text-mid);cursor:pointer;transition:all 0.15s;border:none;background:none;width:100%;font-family:'DM Sans',sans-serif;text-align:left}
+.nav-item:hover{background:var(--warm);color:var(--brown)}
+.nav-item.active{background:var(--brown);color:#fff}
+.nav-item svg{width:16px;height:16px;flex-shrink:0}
+.nav-divider{height:0.5px;background:var(--border);margin:0.75rem 1rem}
+
+.main-content{flex:1;padding:1.5rem;overflow-y:auto;max-width:900px}
+.page{display:none}.page.active{display:block}
+.page-title{font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--brown);margin-bottom:4px}
+.page-sub{font-size:13px;color:var(--text-soft);margin-bottom:1.5rem}
+
+/* CARDS */
+.card{background:#fff;border:0.5px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem;box-shadow:var(--shadow)}
+.card-title{font-size:14px;font-weight:500;color:var(--text-mid);margin-bottom:1rem}
+
+/* METRICS */
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:1.25rem}
+.metric{background:#fff;border:0.5px solid var(--border);border-radius:var(--radius);padding:1rem;box-shadow:var(--shadow)}
+.metric-label{font-size:11px;color:var(--text-soft);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.04em}
+.metric-val{font-size:22px;font-weight:600;color:var(--text)}
+.metric-sub{font-size:11px;color:var(--text-soft);margin-top:3px}
+.metric.you{border-left:3px solid var(--green)}
+.metric.julie{border-left:3px solid var(--blue)}
+
+/* FORMS */
+.form-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.form-row .fg{flex:1;min-width:100px}
+.fg label{font-size:12px;font-weight:500;color:var(--text-mid);display:block;margin-bottom:5px}
+.fg input,.fg select{width:100%;padding:9px 12px;border:0.5px solid var(--border-mid);border-radius:var(--radius-sm);font-size:13px;background:var(--cream);color:var(--text);font-family:'DM Sans',sans-serif}
+.fg input:focus,.fg select:focus{outline:none;border-color:var(--brown-pale)}
+.btn{padding:9px 18px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;border:none;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--brown);color:#fff}.btn-primary:hover{background:var(--brown-light)}
+.btn-danger{background:none;border:0.5px solid var(--border-mid);color:var(--red);font-size:12px;padding:5px 10px}.btn-danger:hover{background:var(--red-pale)}
+.btn-sm{padding:5px 12px;font-size:12px}
+.hint{font-size:11px;color:var(--text-soft);margin-top:5px}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:11px;font-weight:600;color:var(--text-soft);text-transform:uppercase;letter-spacing:0.04em;padding:8px 10px;border-bottom:0.5px solid var(--border-mid)}
+td{padding:9px 10px;border-bottom:0.5px solid var(--border);vertical-align:middle;color:var(--text)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--cream)}
+
+/* BADGES */
+.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:500}
+.badge-green{background:var(--green-pale);color:var(--green)}
+.badge-amber{background:var(--amber-pale);color:var(--amber)}
+.badge-red{background:var(--red-pale);color:var(--red)}
+.badge-blue{background:var(--blue-pale);color:var(--blue)}
+.badge-brown{background:var(--warm);color:var(--brown)}
+
+/* SPLIT VISUAL */
+.split-visual{display:flex;border-radius:var(--radius-sm);overflow:hidden;margin:8px 0;height:44px}
+.split-you-bar{background:var(--green-pale);display:flex;align-items:center;padding:0 12px;font-size:12px;font-weight:500;color:var(--green);flex:0 0 70%}
+.split-julie-bar{background:var(--blue-pale);display:flex;align-items:center;padding:0 12px;font-size:12px;font-weight:500;color:var(--blue);flex:0 0 30%}
+
+/* LOG */
+.log-item{display:flex;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--border);font-size:12px;align-items:flex-start}
+.log-item:last-child{border-bottom:none}
+.log-dot{width:8px;height:8px;border-radius:50%;margin-top:3px;flex-shrink:0}
+.log-by-you{background:var(--green)}
+.log-by-julie{background:var(--blue)}
+.log-meta{color:var(--text-soft)}
+
+/* SALES */
+.sales-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--border)}
+.sales-row:last-child{border-bottom:none}
+
+/* EMPTY */
+.empty{text-align:center;padding:2rem;color:var(--text-soft);font-size:13px}
+.empty-icon{font-size:2rem;margin-bottom:8px;opacity:0.4}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .sidebar{display:none}
+  .main-content{padding:1rem}
+  .form-row{flex-direction:column}
+  .metrics-grid{grid-template-columns:1fr 1fr}
+}
+
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:24px;background:var(--brown);color:#fff;padding:10px 18px;border-radius:var(--radius-sm);font-size:13px;box-shadow:var(--shadow-lg);transform:translateY(80px);opacity:0;transition:all 0.3s;z-index:9999;pointer-events:none}
+#toast.show{transform:translateY(0);opacity:1}
+
+/* MOBILE NAV */
+.mobile-nav{display:none;background:#fff;border-top:0.5px solid var(--border);padding:8px 0;position:fixed;bottom:0;left:0;right:0;z-index:100}
+.mobile-nav-items{display:flex;justify-content:space-around}
+.mobile-nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:var(--text-soft);cursor:pointer;padding:4px 12px;border-radius:var(--radius-sm);background:none;border:none;font-family:'DM Sans',sans-serif}
+.mobile-nav-item.active{color:var(--brown)}
+.mobile-nav-item svg{width:20px;height:20px}
+@media(max-width:600px){.mobile-nav{display:block}.main-content{padding-bottom:80px}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <h1>🍮 Merienda POS</h1>
+      <p>Home business tracker</p>
+    </div>
+    <div class="login-tabs">
+      <button class="login-tab active" onclick="setLoginRole('owner')">Owner (You)</button>
+      <button class="login-tab" onclick="setLoginRole('julie')">Julie</button>
+    </div>
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" id="login-user" placeholder="Enter username">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="login-pass" placeholder="Enter password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="btn-login" onclick="doLogin()">Sign in</button>
+    <p class="login-error" id="login-error"></p>
+    <p style="font-size:11px;color:var(--text-soft);text-align:center;margin-top:1rem">Default: owner/owner1234 · julie/julie1234</p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <header>
+    <div class="header-left">
+      <span class="header-logo">🍮 Merienda POS</span>
+      <span class="header-badge" id="role-badge">Owner</span>
+    </div>
+    <div class="user-pill">
+      <div class="user-avatar" id="user-avatar">O</div>
+      <span id="user-name-header">Owner</span>
+      <button class="btn-logout" onclick="doLogout()">Sign out</button>
+    </div>
+  </header>
+
+  <div class="app-body">
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
+      <div class="nav-section">
+        <div class="nav-label">Business</div>
+        <button class="nav-item active" onclick="goPage('dashboard')" id="nav-dashboard">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          Dashboard
+        </button>
+        <button class="nav-item" onclick="goPage('sales')" id="nav-sales">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          Daily Sales
+        </button>
+        <button class="nav-item" onclick="goPage('materials')" id="nav-materials">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+          Raw Materials
+        </button>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-section" id="admin-nav">
+        <div class="nav-label">Admin Only</div>
+        <button class="nav-item" onclick="goPage('products')" id="nav-products">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+          Products
+        </button>
+        <button class="nav-item" onclick="goPage('tubo')" id="nav-tubo">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          Tubo & Split
+        </button>
+        <button class="nav-item" onclick="goPage('activity')" id="nav-activity">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Activity Log
+        </button>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-section" id="julie-tubo-nav" style="display:none">
+        <div class="nav-label">View Only</div>
+        <button class="nav-item" onclick="goPage('tubo')" id="nav-tubo-julie">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          Tubo & Split
+        </button>
+      </div>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+      <!-- DASHBOARD -->
+      <div id="page-dashboard" class="page active">
+        <h2 class="page-title">Dashboard</h2>
+        <p class="page-sub" id="dash-greeting">Good day!</p>
+        <div class="metrics-grid" id="dash-metrics"></div>
+        <div class="card">
+          <div class="card-title">Today's sales summary</div>
+          <div id="dash-today"></div>
+        </div>
+        <div class="card" id="dash-split-card">
+          <div class="card-title">Today's tubo split</div>
+          <div id="dash-split"></div>
+        </div>
+      </div>
+
+      <!-- DAILY SALES -->
+      <div id="page-sales" class="page">
+        <h2 class="page-title">Daily Sales</h2>
+        <p class="page-sub">Encode how many pieces you sold today per product</p>
+        <div class="card">
+          <div class="card-title">Encode sales entry</div>
+          <div class="form-row">
+            <div class="fg"><label>Product</label><select id="sale-product"><option value="">-- Select product --</option></select></div>
+            <div class="fg" style="max-width:110px"><label>Qty sold (pcs)</label><input type="number" id="sale-qty" min="1" step="1" placeholder="0"></div>
+            <div class="fg" style="max-width:150px"><label>Date</label><input type="date" id="sale-date"></div>
+            <div style="display:flex;align-items:flex-end"><button class="btn btn-primary" onclick="addSale()">Add entry</button></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Sales history</div>
+          <div id="sales-list"></div>
+        </div>
+      </div>
+
+      <!-- RAW MATERIALS -->
+      <div id="page-materials" class="page">
+        <h2 class="page-title">Raw Materials</h2>
+        <p class="page-sub">Track ingredients and supplies purchased</p>
+        <div class="card">
+          <div class="card-title">Add purchase / ingredient</div>
+          <div class="form-row">
+            <div class="fg"><label>Material name</label><input type="text" id="mat-name" placeholder="e.g. Flour 1kg"></div>
+            <div class="fg" style="max-width:120px"><label>Cost (₱)</label><input type="number" id="mat-cost" min="0" step="0.5" placeholder="0.00"></div>
+            <div class="fg" style="max-width:100px"><label>Unit</label><select id="mat-unit"><option>pack</option><option>kg</option><option>g</option><option>L</option><option>ml</option><option>pcs</option><option>cup</option></select></div>
+            <div class="fg" style="max-width:140px"><label>Date purchased</label><input type="date" id="mat-date"></div>
+            <div style="display:flex;align-items:flex-end"><button class="btn btn-primary" onclick="addMaterial()">Add</button></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Materials log</div>
+          <div id="mat-list"></div>
+        </div>
+      </div>
+
+      <!-- PRODUCTS (ADMIN) -->
+      <div id="page-products" class="page">
+        <h2 class="page-title">Products</h2>
+        <p class="page-sub">Admin only — set products, prices, and raw material costs</p>
+        <div class="card">
+          <div class="card-title">Add merienda product</div>
+          <div class="form-row">
+            <div class="fg"><label>Product name</label><input type="text" id="prod-name" placeholder="e.g. Puto, Maja Blanca..."></div>
+            <div class="fg" style="max-width:130px"><label>Selling price (₱)</label><input type="number" id="prod-price" min="0" step="0.5" placeholder="0.00"></div>
+            <div class="fg" style="max-width:120px"><label>Batch qty (pcs)</label><input type="number" id="prod-qty" min="1" step="1" placeholder="e.g. 20"></div>
+            <div class="fg" style="max-width:150px"><label>Raw cost/batch (₱)</label><input type="number" id="prod-rawcost" min="0" step="0.5" placeholder="0.00"></div>
+            <div style="display:flex;align-items:flex-end"><button class="btn btn-primary" onclick="addProduct()">Add</button></div>
+          </div>
+          <p class="hint">Cost per piece and margins will be auto-computed. Salary & electricity not included.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">Products list</div>
+          <div id="prod-list"></div>
+        </div>
+      </div>
+
+      <!-- TUBO & SPLIT -->
+      <div id="page-tubo" class="page">
+        <h2 class="page-title">Tubo & Split</h2>
+        <p class="page-sub">Gross margin per product — 70% You · 30% Julie (before electricity & salary)</p>
+        <div class="metrics-grid" id="tubo-metrics"></div>
+        <div class="card">
+          <div class="card-title">Per product breakdown</div>
+          <div id="tubo-table"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Per batch split (visual)</div>
+          <div id="tubo-splits"></div>
+        </div>
+        <div class="card" style="background:var(--warm);border-color:var(--border-mid)">
+          <p style="font-size:12px;color:var(--text-mid);line-height:1.7">⚠️ These margins are <strong>before electricity, gas, and salary</strong>. Deduct daily operating costs from the <em>You (70%)</em> side to get your actual take-home.</p>
+        </div>
+      </div>
+
+      <!-- ACTIVITY LOG (ADMIN) -->
+      <div id="page-activity" class="page">
+        <h2 class="page-title">Activity Log</h2>
+        <p class="page-sub">See every change — who did what and when</p>
+        <div class="card">
+          <div id="activity-log"></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav">
+    <div class="mobile-nav-items">
+      <button class="mobile-nav-item active" onclick="goPage('dashboard')" id="mnav-dashboard">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        Home
+      </button>
+      <button class="mobile-nav-item" onclick="goPage('sales')" id="mnav-sales">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        Sales
+      </button>
+      <button class="mobile-nav-item" onclick="goPage('materials')" id="mnav-materials">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+        Materials
+      </button>
+      <button class="mobile-nav-item" onclick="goPage('tubo')" id="mnav-tubo">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        Tubo
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ── CREDENTIALS ──────────────────────────────────────────────
+const USERS = {
+  owner: { pass: 'owner1234', role: 'owner', display: 'Owner' },
+  julie: { pass: 'julie1234', role: 'julie', display: 'Julie' }
+};
+
+// ── STATE ─────────────────────────────────────────────────────
+let currentUser = null;
+let loginRole = 'owner';
+let db = { products: [], materials: [], sales: [], log: [] };
+
+function loadDB(){ try{ const s=localStorage.getItem('merienda_db'); if(s) db=JSON.parse(s); }catch(e){} }
+function saveDB(){ try{ localStorage.setItem('merienda_db',JSON.stringify(db)); }catch(e){} }
+loadDB();
+
+// ── LOGIN ─────────────────────────────────────────────────────
+function setLoginRole(r){
+  loginRole=r;
+  document.querySelectorAll('.login-tab').forEach((t,i)=>t.classList.toggle('active',(i===0&&r==='owner')||(i===1&&r==='julie')));
+  document.getElementById('login-user').value = r==='owner'?'owner':'julie';
+}
+
+function doLogin(){
+  const u=document.getElementById('login-user').value.trim().toLowerCase();
+  const p=document.getElementById('login-pass').value;
+  const err=document.getElementById('login-error');
+  if(!USERS[u]||USERS[u].pass!==p){ err.textContent='Wrong username or password.'; return; }
+  currentUser=u;
+  err.textContent='';
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').style.display='flex';
+  setupUI();
+  goPage('dashboard');
+}
+
+function doLogout(){
+  currentUser=null;
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('login-pass').value='';
+}
+
+function setupUI(){
+  const u=USERS[currentUser];
+  document.getElementById('role-badge').textContent=u.display;
+  document.getElementById('user-name-header').textContent=u.display;
+  document.getElementById('user-avatar').textContent=u.display[0];
+  if(u.role==='julie'){
+    document.getElementById('admin-nav').style.display='none';
+    document.getElementById('julie-tubo-nav').style.display='block';
+    document.getElementById('mnav-tubo').style.display='flex';
+  } else {
+    document.getElementById('admin-nav').style.display='block';
+    document.getElementById('julie-tubo-nav').style.display='none';
+  }
+  // set today on date inputs
+  const today=new Date().toISOString().slice(0,10);
+  ['sale-date','mat-date'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=today; });
+  populateSaleProductDropdown();
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────
+function goPage(p){
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.nav-item,.mobile-nav-item').forEach(el=>el.classList.remove('active'));
+  const pg=document.getElementById('page-'+p);
+  if(pg) pg.classList.add('active');
+  ['nav-'+p,'mnav-'+p,'nav-'+p+'-julie'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.classList.add('active');
+  });
+  if(p==='dashboard') renderDashboard();
+  if(p==='sales') renderSales();
+  if(p==='materials') renderMaterials();
+  if(p==='products') renderProducts();
+  if(p==='tubo') renderTubo();
+  if(p==='activity') renderActivity();
+}
+
+// ── LOGGING ───────────────────────────────────────────────────
+function logAction(action, detail){
+  db.log.unshift({ user: currentUser, display: USERS[currentUser].display, action, detail, ts: new Date().toISOString() });
+  if(db.log.length>200) db.log=db.log.slice(0,200);
+  saveDB();
+}
+
+function fmtTs(ts){
+  const d=new Date(ts);
+  return d.toLocaleDateString('en-PH',{month:'short',day:'numeric'})+ ' ' + d.toLocaleTimeString('en-PH',{hour:'2-digit',minute:'2-digit'});
+}
+
+// ── PRODUCTS ──────────────────────────────────────────────────
+function addProduct(){
+  if(USERS[currentUser].role!=='owner'){ showToast('Admin only'); return; }
+  const n=document.getElementById('prod-name').value.trim();
+  const sp=parseFloat(document.getElementById('prod-price').value);
+  const qty=parseInt(document.getElementById('prod-qty').value);
+  const rc=parseFloat(document.getElementById('prod-rawcost').value);
+  if(!n||isNaN(sp)||isNaN(qty)||isNaN(rc)){ showToast('Please fill all fields'); return; }
+  const costPc=rc/qty, profitPc=sp-costPc, margin=(profitPc/sp)*100;
+  const prod={ id:Date.now(), name:n, sellingPrice:sp, batchQty:qty, rawCostBatch:rc, costPc, profitPc, margin, youPc:profitPc*0.7, juliePc:profitPc*0.3, addedBy:currentUser };
+  db.products.push(prod);
+  logAction('Added product', `"${n}" @ ₱${sp}/pc`);
+  saveDB();
+  ['prod-name','prod-price','prod-qty','prod-rawcost'].forEach(id=>document.getElementById(id).value='');
+  renderProducts(); populateSaleProductDropdown();
+  showToast(`"${n}" added`);
+}
+
+function deleteProduct(id){
+  if(USERS[currentUser].role!=='owner'){ showToast('Admin only'); return; }
+  const p=db.products.find(x=>x.id===id);
+  if(!confirm(`Delete "${p?.name}"?`)) return;
+  db.products=db.products.filter(x=>x.id!==id);
+  logAction('Deleted product', `"${p?.name}"`);
+  saveDB(); renderProducts(); populateSaleProductDropdown(); showToast('Deleted');
+}
+
+function renderProducts(){
+  const el=document.getElementById('prod-list');
+  if(!db.products.length){ el.innerHTML='<div class="empty"><div class="empty-icon">🍱</div>No products yet.</div>'; return; }
+  el.innerHTML='<div class="tbl-wrap"><table><thead><tr><th>Product</th><th>Sell ₱</th><th>Cost/pc</th><th>Tubo/pc</th><th>You 70%</th><th>Julie 30%</th><th>Margin</th><th></th></tr></thead><tbody>'+
+    db.products.map(p=>{
+      const cls=p.margin>=50?'badge-green':p.margin>=30?'badge-amber':'badge-red';
+      return `<tr><td><strong style="font-weight:500">${p.name}</strong></td><td>₱${p.sellingPrice.toFixed(2)}</td><td>₱${p.costPc.toFixed(2)}</td><td>₱${p.profitPc.toFixed(2)}</td><td style="color:var(--green);font-weight:500">₱${p.youPc.toFixed(2)}</td><td style="color:var(--blue);font-weight:500">₱${p.juliePc.toFixed(2)}</td><td><span class="badge ${cls}">${p.margin.toFixed(0)}%</span></td><td><button class="btn btn-danger btn-sm" onclick="deleteProduct(${p.id})">Delete</button></td></tr>`;
+    }).join('')+'</tbody></table></div>';
+}
+
+// ── MATERIALS ─────────────────────────────────────────────────
+function addMaterial(){
+  const n=document.getElementById('mat-name').value.trim();
+  const c=parseFloat(document.getElementById('mat-cost').value);
+  const u=document.getElementById('mat-unit').value;
+  const d=document.getElementById('mat-date').value;
+  if(!n||isNaN(c)){ showToast('Please fill all fields'); return; }
+  const mat={ id:Date.now(), name:n, cost:c, unit:u, date:d||new Date().toISOString().slice(0,10), addedBy:currentUser };
+  db.materials.push(mat);
+  logAction('Added material', `"${n}" ₱${c} (${u}) — by ${USERS[currentUser].display}`);
+  saveDB();
+  document.getElementById('mat-name').value=''; document.getElementById('mat-cost').value='';
+  renderMaterials(); showToast(`"${n}" added`);
+}
+
+function deleteMaterial(id){
+  if(USERS[currentUser].role!=='owner'){ showToast('Admin only — ask Owner to delete'); return; }
+  const m=db.materials.find(x=>x.id===id);
+  if(!confirm(`Delete "${m?.name}"?`)) return;
+  db.materials=db.materials.filter(x=>x.id!==id);
+  logAction('Deleted material', `"${m?.name}"`);
+  saveDB(); renderMaterials(); showToast('Deleted');
+}
+
+function renderMaterials(){
+  const el=document.getElementById('mat-list');
+  const isOwner=USERS[currentUser].role==='owner';
+  if(!db.materials.length){ el.innerHTML='<div class="empty"><div class="empty-icon">🧂</div>No materials logged yet.</div>'; return; }
+  const sorted=[...db.materials].sort((a,b)=>b.id-a.id);
+  el.innerHTML='<div class="tbl-wrap"><table><thead><tr><th>Material</th><th>Cost</th><th>Unit</th><th>Date</th><th>Added by</th>'+(isOwner?'<th></th>':'')+'</tr></thead><tbody>'+
+    sorted.map(m=>{
+      const who=m.addedBy==='julie'?'<span class="badge badge-blue">Julie</span>':'<span class="badge badge-brown">Owner</span>';
+      const del=isOwner?`<td><button class="btn btn-danger btn-sm" onclick="deleteMaterial(${m.id})">Delete</button></td>`:'';
+      return `<tr><td><strong style="font-weight:500">${m.name}</strong></td><td>₱${m.cost.toFixed(2)}</td><td>${m.unit}</td><td>${m.date}</td><td>${who}</td>${del}</tr>`;
+    }).join('')+'</tbody></table></div>';
+}
+
+// ── SALES ─────────────────────────────────────────────────────
+function populateSaleProductDropdown(){
+  const sel=document.getElementById('sale-product');
+  if(!sel) return;
+  const prev=sel.value;
+  sel.innerHTML='<option value="">-- Select product --</option>';
+  db.products.forEach(p=>{ const o=document.createElement('option'); o.value=p.id; o.textContent=`${p.name} (₱${p.sellingPrice.toFixed(2)}/pc)`; sel.appendChild(o); });
+  if(prev) sel.value=prev;
+}
+
+function addSale(){
+  const pid=parseInt(document.getElementById('sale-product').value);
+  const qty=parseInt(document.getElementById('sale-qty').value);
+  const d=document.getElementById('sale-date').value;
+  if(!pid||isNaN(qty)||qty<1){ showToast('Please fill all fields'); return; }
+  const prod=db.products.find(p=>p.id===pid);
+  if(!prod){ showToast('Product not found'); return; }
+  const revenue=prod.sellingPrice*qty;
+  const rawCost=prod.costPc*qty;
+  const tubo=prod.profitPc*qty;
+  const sale={ id:Date.now(), productId:pid, productName:prod.name, qty, sellingPrice:prod.sellingPrice, revenue, rawCost, tubo, youShare:tubo*0.7, julieShare:tubo*0.3, date:d||new Date().toISOString().slice(0,10), addedBy:currentUser };
+  db.sales.push(sale);
+  logAction('Encoded sale', `${qty}x "${prod.name}" on ${sale.date} — ₱${revenue.toFixed(2)} revenue, ₱${tubo.toFixed(2)} tubo — by ${USERS[currentUser].display}`);
+  saveDB();
+  document.getElementById('sale-qty').value='';
+  renderSales(); showToast(`Sale recorded! Tubo: ₱${tubo.toFixed(2)}`);
+}
+
+function deleteSale(id){
+  if(USERS[currentUser].role!=='owner'){ showToast('Admin only'); return; }
+  const s=db.sales.find(x=>x.id===id);
+  if(!confirm('Delete this sale entry?')) return;
+  db.sales=db.sales.filter(x=>x.id!==id);
+  logAction('Deleted sale', `${s?.qty}x "${s?.productName}" on ${s?.date}`);
+  saveDB(); renderSales(); showToast('Deleted');
+}
+
+function renderSales(){
+  const el=document.getElementById('sales-list');
+  const isOwner=USERS[currentUser].role==='owner';
+  if(!db.sales.length){ el.innerHTML='<div class="empty"><div class="empty-icon">📊</div>No sales yet. Start encoding!</div>'; return; }
+  const sorted=[...db.sales].sort((a,b)=>b.id-a.id);
+  el.innerHTML='<div class="tbl-wrap"><table><thead><tr><th>Date</th><th>Product</th><th>Qty</th><th>Revenue</th><th>Tubo</th><th>You 70%</th><th>Julie 30%</th><th>By</th>'+(isOwner?'<th></th>':'')+'</tr></thead><tbody>'+
+    sorted.map(s=>{
+      const who=s.addedBy==='julie'?'<span class="badge badge-blue">Julie</span>':'<span class="badge badge-brown">Owner</span>';
+      const del=isOwner?`<td><button class="btn btn-danger btn-sm" onclick="deleteSale(${s.id})">Del</button></td>`:'';
+      return `<tr><td>${s.date}</td><td>${s.productName}</td><td>${s.qty}</td><td>₱${s.revenue.toFixed(2)}</td><td>₱${s.tubo.toFixed(2)}</td><td style="color:var(--green);font-weight:500">₱${s.youShare.toFixed(2)}</td><td style="color:var(--blue);font-weight:500">₱${s.julieShare.toFixed(2)}</td><td>${who}</td>${del}</tr>`;
+    }).join('')+'</tbody></table></div>';
+}
+
+// ── TUBO & SPLIT ──────────────────────────────────────────────
+function renderTubo(){
+  const mEl=document.getElementById('tubo-metrics');
+  const tEl=document.getElementById('tubo-table');
+  const sEl=document.getElementById('tubo-splits');
+  if(!db.products.length){
+    mEl.innerHTML=''; tEl.innerHTML='<div class="empty">No products yet.</div>'; sEl.innerHTML=''; return;
+  }
+  const sorted=[...db.products].sort((a,b)=>b.margin-a.margin);
+  const totalBatchTubo=db.products.reduce((s,p)=>s+(p.profitPc*p.batchQty),0);
+  const totalYou=totalBatchTubo*0.7, totalJulie=totalBatchTubo*0.3;
+  const avgMargin=db.products.reduce((s,p)=>s+p.margin,0)/db.products.length;
+  mEl.innerHTML=`
+    <div class="metric"><div class="metric-label">Total batch tubo</div><div class="metric-val">₱${totalBatchTubo.toFixed(2)}</div><div class="metric-sub">raw cost only</div></div>
+    <div class="metric you"><div class="metric-label">Your share (70%)</div><div class="metric-val" style="color:var(--green)">₱${totalYou.toFixed(2)}</div><div class="metric-sub">your earnings</div></div>
+    <div class="metric julie"><div class="metric-label">Julie's share (30%)</div><div class="metric-val" style="color:var(--blue)">₱${totalJulie.toFixed(2)}</div><div class="metric-sub">Julie's cut</div></div>
+    <div class="metric"><div class="metric-label">Avg margin</div><div class="metric-val">${avgMargin.toFixed(0)}%</div><div class="metric-sub">${db.products.length} product${db.products.length>1?'s':''}</div></div>
+  `;
+  tEl.innerHTML='<div class="tbl-wrap"><table><thead><tr><th>Product</th><th>Sell ₱</th><th>Tubo/pc</th><th style="color:var(--green)">You 70%</th><th style="color:var(--blue)">Julie 30%</th><th>Margin</th></tr></thead><tbody>'+
+    sorted.map(p=>{
+      const cls=p.margin>=50?'badge-green':p.margin>=30?'badge-amber':'badge-red';
+      return `<tr><td><strong style="font-weight:500">${p.name}</strong></td><td>₱${p.sellingPrice.toFixed(2)}</td><td>₱${p.profitPc.toFixed(2)}</td><td style="color:var(--green);font-weight:500">₱${p.youPc.toFixed(2)}</td><td style="color:var(--blue);font-weight:500">₱${p.juliePc.toFixed(2)}</td><td><span class="badge ${cls}">${p.margin.toFixed(0)}%</span></td></tr>`;
+    }).join('')+'</tbody></table></div>';
+  sEl.innerHTML=sorted.map(p=>{
+    const bt=p.profitPc*p.batchQty, by=bt*0.7, bj=bt*0.3;
+    return `<div style="margin-bottom:1.25rem">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
+        <span style="font-size:14px;font-weight:500">${p.name}</span>
+        <span style="font-size:12px;color:var(--text-soft)">${p.batchQty} pcs · total tubo ₱${bt.toFixed(2)}</span>
+      </div>
+      <div class="split-visual">
+        <div class="split-you-bar">You (70%) — ₱${by.toFixed(2)}</div>
+        <div class="split-julie-bar">Julie — ₱${bj.toFixed(2)}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────
+function renderDashboard(){
+  const today=new Date().toISOString().slice(0,10);
+  const hour=new Date().getHours();
+  const greeting=hour<12?'Good morning':'hour<17?Good afternoon':'Good evening';
+  const gMap={owner:'Owner',julie:'Julie'};
+  document.getElementById('dash-greeting').textContent=`${hour<12?'Good morning':hour<17?'Good afternoon':'Good evening'}, ${gMap[currentUser]}! 👋`;
+
+  const todaySales=db.sales.filter(s=>s.date===today);
+  const totalRev=todaySales.reduce((s,x)=>s+x.revenue,0);
+  const totalTubo=todaySales.reduce((s,x)=>s+x.tubo,0);
+  const totalYou=totalTubo*0.7, totalJulie=totalTubo*0.3;
+  const totalMats=db.materials.filter(m=>m.date===today).reduce((s,m)=>s+m.cost,0);
+
+  document.getElementById('dash-metrics').innerHTML=`
+    <div class="metric"><div class="metric-label">Today's revenue</div><div class="metric-val">₱${totalRev.toFixed(2)}</div><div class="metric-sub">${todaySales.length} entries</div></div>
+    <div class="metric"><div class="metric-label">Today's tubo</div><div class="metric-val">₱${totalTubo.toFixed(2)}</div><div class="metric-sub">gross margin</div></div>
+    <div class="metric you"><div class="metric-label">Your share today</div><div class="metric-val" style="color:var(--green)">₱${totalYou.toFixed(2)}</div><div class="metric-sub">70%</div></div>
+    <div class="metric julie"><div class="metric-label">Julie's share today</div><div class="metric-val" style="color:var(--blue)">₱${totalJulie.toFixed(2)}</div><div class="metric-sub">30%</div></div>
+  `;
+
+  const todayEl=document.getElementById('dash-today');
+  if(!todaySales.length){ todayEl.innerHTML='<div class="empty">No sales encoded today yet.</div>'; }
+  else {
+    todayEl.innerHTML='<div class="tbl-wrap"><table><thead><tr><th>Product</th><th>Qty</th><th>Revenue</th><th>Tubo</th><th>By</th></tr></thead><tbody>'+
+      todaySales.map(s=>{
+        const who=s.addedBy==='julie'?'<span class="badge badge-blue">Julie</span>':'<span class="badge badge-brown">Owner</span>';
+        return `<tr><td>${s.productName}</td><td>${s.qty}</td><td>₱${s.revenue.toFixed(2)}</td><td>₱${s.tubo.toFixed(2)}</td><td>${who}</td></tr>`;
+      }).join('')+'</tbody></table></div>';
+  }
+
+  const splitEl=document.getElementById('dash-split');
+  if(!totalTubo){ splitEl.innerHTML='<div class="empty">No tubo yet today.</div>'; }
+  else {
+    splitEl.innerHTML=`<div class="split-visual"><div class="split-you-bar">You (70%) — ₱${totalYou.toFixed(2)}</div><div class="split-julie-bar">Julie — ₱${totalJulie.toFixed(2)}</div></div>
+    <p style="font-size:12px;color:var(--text-soft);margin-top:8px">Materials spent today: ₱${totalMats.toFixed(2)}</p>`;
+  }
+}
+
+// ── ACTIVITY LOG ──────────────────────────────────────────────
+function renderActivity(){
+  const el=document.getElementById('activity-log');
+  if(!db.log.length){ el.innerHTML='<div class="empty">No activity yet.</div>'; return; }
+  el.innerHTML=db.log.map(l=>`
+    <div class="log-item">
+      <div class="log-dot ${l.user==='julie'?'log-by-julie':'log-by-you'}" style="margin-top:4px"></div>
+      <div>
+        <span style="font-weight:500">${l.display}</span> — ${l.action}<br>
+        <span class="log-meta">${l.detail}</span><br>
+        <span class="log-meta" style="font-size:11px">${fmtTs(l.ts)}</span>
+      </div>
+    </div>`).join('');
+}
+
+// ── TOAST ─────────────────────────────────────────────────────
+let toastTimer;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+setLoginRole('owner');
+document.getElementById('login-user').value='owner';
+</script>
+</body>
+</html>
