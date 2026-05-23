@@ -238,9 +238,9 @@ tr:hover td{background:var(--cream)}
       <!-- PRODUCTS -->
       <div id="page-products" class="page">
         <h2 class="page-title">Products</h2>
-        <p class="page-sub" id="products-sub">View products and batch sizes</p>
-        <div class="card" id="add-product-card">
-          <div class="card-title">Add product (Admin only)</div>
+        <p class="page-sub">Add products, set prices, and view gross margins</p>
+        <div class="card">
+          <div class="card-title">Add product</div>
           <div class="form-row">
             <div class="fg"><label>Product name</label><input type="text" id="prod-name" placeholder="e.g. Turon, Banana Cue, Camote Cue"></div>
             <div class="fg" style="max-width:130px"><label>Selling price (₱)</label><input type="number" id="prod-price" min="0" step="0.5" placeholder="0.00"></div>
@@ -251,6 +251,9 @@ tr:hover td{background:var(--cream)}
           <p class="hint">Salary and electricity not included — gross tubo only.</p>
         </div>
         <div class="card"><div class="card-title">Products list</div><div id="prod-list"><div class="loading">Loading...</div></div></div>
+        <div class="card" style="background:var(--warm);border-color:var(--border-mid)">
+          <p style="font-size:12px;color:var(--text-mid);line-height:1.7">⚠️ The margins shown above are <strong>before</strong> electricity, gas, and salary. These are gross tubo only — actual take-home will be lower once operating costs are deducted.</p>
+        </div>
       </div>
 
       <!-- TUBO & SPLIT (owner only) -->
@@ -351,20 +354,15 @@ function setupUI() {
   var today = new Date().toISOString().slice(0,10);
   ['sale-date','mat-date','use-date'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=today; });
   if (u.role==='julie') {
-    // julie: hide admin nav, hide tubo split card, show products in main nav
     document.getElementById('admin-nav').style.display='none';
     document.getElementById('admin-divider').style.display='none';
     document.getElementById('owner-split-card').style.display='none';
     document.getElementById('nav-products-julie').style.display='block';
-    document.getElementById('add-product-card').style.display='none';
-    document.getElementById('products-sub').textContent='View products and how many pcs per batch';
   } else {
     document.getElementById('admin-nav').style.display='block';
     document.getElementById('admin-divider').style.display='block';
     document.getElementById('owner-split-card').style.display='block';
     document.getElementById('nav-products-julie').style.display='none';
-    document.getElementById('add-product-card').style.display='block';
-    document.getElementById('products-sub').textContent='Admin only — set products and prices';
   }
 }
 
@@ -412,7 +410,6 @@ function deleteProduct(id) {
 }
 function listenProducts() {
   var el=document.getElementById('prod-list');
-  var isOwner=USERS[currentUser].role==='owner';
   el.innerHTML='<div class="loading">Loading...</div>';
   var unsub=fdb.collection('products').orderBy('createdAt','desc').onSnapshot(function(snap){
     cachedProducts=snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
