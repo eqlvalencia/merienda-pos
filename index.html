@@ -573,7 +573,6 @@ function listenSales() {
 
 // ── TUBO ─────────────────────────────────────────────────────
 function listenTubo() {
-  if(USERS[currentUser].role!=='owner'){goPage('dashboard');return;}
   var mEl=document.getElementById('tubo-metrics'),tEl=document.getElementById('tubo-table'),sEl=document.getElementById('tubo-splits');
   mEl.innerHTML='';tEl.innerHTML='<div class="loading">Loading...</div>';sEl.innerHTML='';
   var unsub=fdb.collection('products').orderBy('margin','desc').onSnapshot(function(snap){
